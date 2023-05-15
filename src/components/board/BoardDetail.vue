@@ -6,6 +6,8 @@
       <div>{{article.userName}}</div>
       <div>{{article.registerTime}}</div>
       <div>{{article.content}}</div>
+      <div>{{article.readCount}}</div>
+      <button @click="moveList">목록</button>
   </div>
 </template>
 
@@ -27,8 +29,8 @@ export default {
     },
   },
   created() {
-    axios.get(`/board/${this.$route.params.articleNo}`).then(({ data }) => {
-      this.article = data;
+    axios.post(`/board/view/${this.$route.params.articleNo}`).then(({ data }) => {
+      this.article = data.data;
     });
   },
   methods: {
@@ -48,6 +50,9 @@ export default {
           params: { articleNo: this.article.articleNo },
         });
       }
+    },
+    moveList() {
+      this.$router.push({ name: "boardList" });
     },
   },
 };

@@ -45,7 +45,6 @@ export default {
       method: "get"
     }).then(({data}) => {
       this.articles = data.data
-      console.log(data)
     })
   },
   methods: {

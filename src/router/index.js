@@ -39,19 +39,19 @@ const routes = [
           import("@/components/board/BoardWriter.vue"),
       },
       {
-        path: "view/:articleno",
+        path: "view/:articleNo",
         name: "boardDetail",
         component: () =>
           import("@/components/board/BoardDetail.vue"),
       },
       {
-        path: "modify/:articleno",
+        path: "modify/:articleNo",
         name: "boardModify",
         component: () =>
           import("@/components/board/BoardModify.vue"),
       },
       {
-        path: "delete/:articleno",
+        path: "delete/:articleNo",
         name: "boardDelete",
         component: () =>
           import("@/components/board/BoardDelete.vue"),
