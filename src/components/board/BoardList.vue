@@ -2,6 +2,16 @@
   <div class="container">
     <p>BoardList</p>
 
+    <div>
+      <select name="" id="" v-model="key">
+        <option v-for="obj in keys" :key="obj.articleNo" :value="obj.name">
+          {{obj.desc}}
+        </option>
+      </select>
+      <input type="text" v-model="word">
+      <button @click="searchArticles">검색</button>
+    </div>
+
     <div v-if="articles.length">
       <table class="user-list">
         <thead>
@@ -37,6 +47,19 @@ export default {
   data() {
     return {
       articles: [],
+      key: 'subject',
+      keys: [
+        {
+          name: "subject", desc: "제목"
+        },
+        {
+          name: "content", desc: "내용"
+        },
+        {
+          name: "userName", desc: "작성자"
+        },
+      ],
+      word: '',
     }
   },
   created() {
@@ -50,6 +73,13 @@ export default {
   methods: {
     moveWrite() {
       this.$router.push({ name : "boardWriter"});
+    },
+    searchArticles() {
+      axios.get(`/board/search?key=${this.key}&word=${this.word}`)
+      .then(({data}) => {
+        console.log(data.data);
+        this.articles = data.data;
+      });
     }
   },
 };
