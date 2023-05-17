@@ -1,0 +1,95 @@
+# This workflow will do a clean installation of node dependencies, cache/restore them, build the source code and run tests across different versions of node
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-nodejs
+
+name: Node.js CI
+
+on:
+  push:
+    branches: [ "main", "develop" ]
+  pull_request:
+    branches: [ "main", "develop" ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    
+    - uses: actions/setup-node@v3
+      with:
+        node-version: 18.16.0
+
+    - name: Make Dockerfile (pub)
+      if: contains(github.ref, 'main')
+      run: |
+        touch ./Dockerfile
+
+        echo "${{ secrets.DOCKERFILE }}" >> ./Dockerfile
+      shell: bash
+      
+    - name: Make Dockerfile (dev)
+      if: contains(github.ref, 'develop')
+      run: |
+        touch ./Dockerfile
+
+        echo "${{ secrets.DOCKERFILE_DEV }}" >> ./Dockerfile
+      shell: bash
+    
+    - name: DockerHub Login
+      uses: docker/login-action@v2
+      with:
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_PASSWORD }}
+
+    - name: Docker Image Build (pub)
+      if: contains(github.ref, 'main')
+      run: docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.FEND_PROJECT_NAME }}:publish .
+
+    - name: Docker Image Build (dev)
+      if: contains(github.ref, 'develop')
+      run: docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.FEND_PROJECT_NAME }}:develop .
+      
+    - name: DockerHub Push (pub)
+      if: contains(github.ref, 'main')
+      run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.FEND_PROJECT_NAME }}:publish
+
+    - name: DockerHub Push (dev)
+      if: contains(github.ref, 'develop')
+      run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.FEND_PROJECT_NAME }}:develop
+      
+    - name: Application Run (pub)
+      uses: appleboy/ssh-action@v0.1.6
+      if: contains(github.ref, 'main')
+      with:
+        host: ${{ secrets.EC2_HOST }}
+        username: ${{ secrets.EC2_USERNAME }}
+        key: ${{ secrets.EC2_KEY }}
+
+        script: |
+          sudo docker kill ${{ secrets.FEND_PROJECT_NAME }}_publish
+          sudo docker rm -f ${{ secrets.FEND_PROJECT_NAME }}_publish
+          sudo docker rmi ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.FEND_PROJECT_NAME }}:publish
+          sudo docker pull ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.FEND_PROJECT_NAME }}:publish
+          sudo docker run -p ${{ secrets.PORT }}:${{ secrets.PORT }} \
+          --name ${{ secrets.FEND_PROJECT_NAME }}_publish \
+          -d ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.FEND_PROJECT_NAME }}:publish
+
+    - name: Application Run (dev)
+      uses: appleboy/ssh-action@v0.1.6
+      if: contains(github.ref, 'develop')
+      with:
+        host: ${{ secrets.EC2_HOST }}
+        username: ${{ secrets.EC2_USERNAME }}
+        key: ${{ secrets.EC2_KEY }}
+
+        script: |
+          sudo docker kill ${{ secrets.FEND_PROJECT_NAME }}_develop
+          sudo docker rm -f ${{ secrets.FEND_PROJECT_NAME }}_develop
+          sudo docker rmi ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.FEND_PROJECT_NAME }}:develop
+          sudo docker pull ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.FEND_PROJECT_NAME }}:develop
+          sudo docker run -p ${{ secrets.PORT_DEV }}:${{ secrets.PORT_DEV }} \
+          --name ${{ secrets.FEND_PROJECT_NAME }}_develop \
+          -d ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.FEND_PROJECT_NAME }}:develop
+                    
