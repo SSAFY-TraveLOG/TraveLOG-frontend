@@ -25,6 +25,38 @@ const routes = [
     path: "/board",
     name: "board",
     component: BoardPage,
+    redirect: "/board/search",
+    children: [
+      {
+        path: "search",
+        name: "boardList",
+        component: () => import("@/components/board/BoardList.vue"),
+      },
+      {
+        path: "write",
+        name: "boardWriter",
+        component: () =>
+          import("@/components/board/BoardWriter.vue"),
+      },
+      {
+        path: "view/:articleNo",
+        name: "boardDetail",
+        component: () =>
+          import("@/components/board/BoardDetail.vue"),
+      },
+      {
+        path: "modify/:articleNo",
+        name: "boardModify",
+        component: () =>
+          import("@/components/board/BoardModify.vue"),
+      },
+      {
+        path: "delete/:articleNo",
+        name: "boardDelete",
+        component: () =>
+          import("@/components/board/BoardDelete.vue"),
+      },
+    ],
   },
   {
     path: "/login",
