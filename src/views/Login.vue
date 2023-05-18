@@ -60,6 +60,8 @@ export default {
             this.loginApi({
                 userId: this.userId,
                 password: this.password,
+            }).then(() => {
+                this.$router.push("/");
             });
         },
         checkPassword() {
