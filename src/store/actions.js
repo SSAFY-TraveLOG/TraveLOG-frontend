@@ -21,20 +21,34 @@ let processResponse = (store, response) => {
     localStorage.setItem("refreshToken", response.token.refreshToken);
 };
 
+const loginApi = async (store, { userId, password }) => {
+    axios
+        .post(`/auth/check`, {
+            userId: userId,
+            password: password,
+        })
+        .then((response) => {
+            console.log("before", store);
+            processResponse(store, response.data.data);
+
+            console.log("after", store);
+        });
+
+    return store.getters.getUserId; // 로그인 결과를 리턴한다
+};
+
+const logoutApi = async (store) => {
+    console.log("logoutApi");
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("refreshToken");
+    setUserId(store, null);
+    setUserNo(store, null);
+    setUserName(store, null);
+
+    console.log(store);
+};
+
 export default {
-    async loginApi(store, { userId, password }) {
-        axios
-            .post(`/auth/check`, {
-                userId: userId,
-                password: password,
-            })
-            .then((response) => {
-                console.log("before", store);
-                processResponse(store, response.data.data);
-
-                console.log("after", store);
-            });
-
-        return store.getters.getUserId; // 로그인 결과를 리턴한다
-    },
+    loginApi,
+    logoutApi,
 };

@@ -12,12 +12,15 @@
                 <router-link to="/board">게시판</router-link>
                 <router-link to="/login">로그인</router-link>
                 <router-link to="/user/join">회원가입</router-link>
+                <button @click="logout">로그아웃</button>
             </div>
         </nav>
     </header>
 </template>
 
 <script>
+import { mapActions } from "vuex";
+
 export default {
     name: "TheHeader",
     components: {},
@@ -27,7 +30,12 @@ export default {
         };
     },
     created() {},
-    methods: {},
+    methods: {
+        ...mapActions(["logoutApi"]),
+        logout() {
+            this.logoutApi();
+        },
+    },
 };
 </script>
 
