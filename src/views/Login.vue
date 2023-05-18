@@ -38,7 +38,8 @@
 </template>
 
 <script>
-import axios from "@/util/axios";
+// import axios from "@/util/axios";
+import { mapActions } from "vuex";
 export default {
     name: "LoginView",
     components: {},
@@ -54,27 +55,12 @@ export default {
     },
     created() {},
     methods: {
+        ...mapActions(["loginApi"]),
         login() {
-            const data = {
+            this.loginApi({
                 userId: this.userId,
                 password: this.password,
-            };
-
-            axios
-                .post(`/auth/check`, data)
-                .then((data) => {
-                    console.log(data);
-                    if (data.status === 200) {
-                        console.log("로그인 성공");
-                        // 토큰 저장하기
-                        // vuex 처리
-                    } else {
-                        this.snackbar = true;
-                    }
-                })
-                .catch((err) => {
-                    console.log(err);
-                });
+            });
         },
         checkPassword() {
             const reg =
