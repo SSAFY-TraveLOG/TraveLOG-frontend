@@ -1,15 +1,5 @@
 <template>
     <div>
-        여기 게시판 만들어야함
-        <!-- <router-view
-        :articles="articles"
-        @get-articles="getArticles"
-        @write-articles="writeArticle"
-        ></router-view>
-        <hr>
-        <board-list></board-list>
-
-        <router-link>글 쓰기</router-link> -->
         <router-view></router-view>
     </div>
 </template>
