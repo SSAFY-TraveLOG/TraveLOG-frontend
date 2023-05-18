@@ -1,18 +1,13 @@
 <template>
-    <div>여기 게시판 만들어야함</div>
+    <div>
+        여기 게시판 만들어야함
+        <router-view></router-view>
+    </div>
 </template>
 
 <script>
 export default {
     name: "BoardPage",
-    components: {},
-    data() {
-        return {
-            message: "",
-        };
-    },
-    created() {},
-    methods: {},
 };
 </script>
 
