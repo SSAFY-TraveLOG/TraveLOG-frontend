@@ -10,6 +10,7 @@
             <div>
                 <router-link to="/attraction">관광지 알아보기</router-link>
                 <router-link to="/board">게시판</router-link>
+                <router-link to="/qna">Q&A</router-link>
                 <router-link to="/login">로그인</router-link>
                 <router-link to="/user/join">회원가입</router-link>
             </div>

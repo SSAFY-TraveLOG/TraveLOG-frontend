@@ -7,6 +7,7 @@ import AttractionPage from "@/views/Attraction";
 import LoginPage from "@/views/Login";
 import JoinPage from "@/views/Join";
 import BoardPage from "@/views/Board";
+import QnaBoardPage from "@/views/QnaBoard";
 
 Vue.use(VueRouter);
 
@@ -39,22 +40,59 @@ const routes = [
           import("@/components/board/BoardWriter.vue"),
       },
       {
-        path: "view/:articleno",
+        path: "view/:articleNo",
         name: "boardDetail",
         component: () =>
           import("@/components/board/BoardDetail.vue"),
       },
       {
-        path: "modify/:articleno",
+        path: "modify/:articleNo",
         name: "boardModify",
         component: () =>
           import("@/components/board/BoardModify.vue"),
       },
       {
-        path: "delete/:articleno",
+        path: "delete/:articleNo",
         name: "boardDelete",
         component: () =>
           import("@/components/board/BoardDelete.vue"),
+      },
+    ],
+  },
+  {
+    path: "/qna",
+    name: "qnaBoard",
+    component: QnaBoardPage,
+    redirect: "/qna/search",
+    children: [
+      {
+        path: "search",
+        name: "qnaBoardList",
+        component: () => import("@/components/qnaboard/QnaBoardList.vue"),
+      },
+      {
+        path: "write",
+        name: "qnaBoardWriter",
+        component: () =>
+          import("@/components/qnaboard/QnaBoardWriter.vue"),
+      },
+      {
+        path: "view/:articleNo",
+        name: "qnaBoardDetail",
+        component: () =>
+          import("@/components/qnaboard/QnaBoardDetail.vue"),
+      },
+      {
+        path: "modify/:articleNo",
+        name: "qnaBoardModify",
+        component: () =>
+          import("@/components/qnaboard/QnaBoardModify.vue"),
+      },
+      {
+        path: "delete/:articleNo",
+        name: "qnaBoardDelete",
+        component: () =>
+          import("@/components/qnaboard/QnaBoardDelete.vue"),
       },
     ],
   },
