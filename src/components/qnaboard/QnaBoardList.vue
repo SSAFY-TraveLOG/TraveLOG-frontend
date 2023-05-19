@@ -207,45 +207,47 @@ export default {
           userNo: this.userNo,
         }),
       }).then(({ data }) => {
-        console.log(data);
-        data.data.forEach((element) => {
-          if (element.registerTime == "") return "";
+        let idx = 1;
+        if (data.data != null) {
+          data.data.forEach((element) => {
+            element.displayNo = idx++;
+            if (element.registerTime == "") return "";
 
-          let jsDate = new Date(element.registerTime);
+            let jsDate = new Date(element.registerTime);
 
-          let year = jsDate.getFullYear();
-          let month = jsDate.getMonth() + 1;
-          let date = jsDate.getDate();
+            let year = jsDate.getFullYear();
+            let month = jsDate.getMonth() + 1;
+            let date = jsDate.getDate();
 
-          if (month < 10) {
-            month = "0" + month;
-          }
-          if (date < 10) {
-            date = "0" + date;
-          }
+            if (month < 10) {
+              month = "0" + month;
+            }
+            if (date < 10) {
+              date = "0" + date;
+            }
 
-          element.registerTime = year + "-" + month + "-" + date;
-        });
+            element.registerTime = year + "-" + month + "-" + date;
+          });
 
-        data.data.forEach((element) => {
-          if (element.modifiedTime == "") return "";
+          data.data.forEach((element) => {
+            if (element.modifiedTime == "") return "";
 
-          let jsDate = new Date(element.modifiedTime);
+            let jsDate = new Date(element.modifiedTime);
 
-          let year = jsDate.getFullYear();
-          let month = jsDate.getMonth() + 1;
-          let date = jsDate.getDate();
+            let year = jsDate.getFullYear();
+            let month = jsDate.getMonth() + 1;
+            let date = jsDate.getDate();
 
-          if (month < 10) {
-            month = "0" + month;
-          }
-          if (date < 10) {
-            date = "0" + date;
-          }
+            if (month < 10) {
+              month = "0" + month;
+            }
+            if (date < 10) {
+              date = "0" + date;
+            }
 
-          element.modifiedTime = year + "-" + month + "-" + date;
-        });
-
+            element.modifiedTime = year + "-" + month + "-" + date;
+          });
+        }
         this.articles = data.data;
       });
     },
