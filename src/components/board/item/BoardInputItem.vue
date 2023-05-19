@@ -1,16 +1,51 @@
 <template>
-  <div>
-    <form @submit="onSubmit" @reset="onReset">
-      <input type="text" v-model="article.subject" placeholder="제목:">
-
-      <label for="content">내용:</label><br>
-      <textarea name="content" id="content" cols="30" rows="10" v-model="article.content"></textarea>
-
-      <button type="submit" v-if="this.type === 'write'">등록</button>
-      <button type="submit" v-else>수정</button>
-      <button type="reset">초기화</button>
-    </form>
-  </div>
+  <v-sheet
+    class="ma-5 pt-4 pa-7 d-flex flex-column justify-start"
+    color="white"
+    elevation="5"
+    min-height="800px"
+    rounded
+  >
+    <h1 class="align-self-center mb-3">게시글 작성</h1>
+    <v-container>
+      <form @submit="onSubmit" @reset="onReset">
+        <v-text-field
+          v-model="article.subject"
+          class="mb-5"
+          full-width
+          hide-details
+          color="blacks"
+          label="제목"
+          outlined
+        ></v-text-field>
+        <v-textarea
+          v-model="article.content"
+          label="내용"
+          color="blacks"
+          no-resize
+          hide-details
+          full-width
+          height="500px"
+          outlined
+        ></v-textarea>
+        <v-container class="d-flex flex-row justify-space-between align-center">
+          <v-btn type="reset" class="mr-6"> 목록 </v-btn>
+          <v-container class="d-flex flex-row justify-end align-center">
+            <v-checkbox
+              v-model="secret"
+              :value="article.secret"
+              class="mr-6"
+              hide-details="true"
+              label="비밀글"
+              dense
+            ></v-checkbox>
+            <v-btn type="submit" v-if="this.type == 'write'"> 등록 </v-btn>
+            <v-btn type="submit" v-else> 수정 </v-btn>
+          </v-container>
+        </v-container>
+      </form>
+    </v-container>
+  </v-sheet>
 </template>
 
 <script>
@@ -20,6 +55,8 @@ export default {
   name: "BoardInputItem",
   data() {
     return {
+      subject: [],
+      content: [],
       article: {
         userNo: 2,
         articleNo: 0,
@@ -91,7 +128,7 @@ export default {
         })
         .then(({ data }) => {
           let msg = "수정 처리시 문제가 발생했습니다.";
-          if (data.status === "OK") {
+          if (data.status == "OK") {
             msg = "수정이 완료되었습니다.";
           }
           alert(msg);
