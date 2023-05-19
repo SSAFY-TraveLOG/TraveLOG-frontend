@@ -1,8 +1,5 @@
 <template>
-  <div>
-    <h3>글수정</h3>
-    <board-input-item type="modify" />
-  </div>
+  <board-input-item type="modify" />
 </template>
 
 <script>
