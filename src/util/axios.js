@@ -5,5 +5,6 @@ export default axios.create({
   baseURL: "http://15.164.228.215:8080",
   headers: {
     "Content-type": "application/json",
+    Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
   },
 });
