@@ -21,27 +21,22 @@ export default {
   data() {
     return {
       article: {
+        userNo: 2,
         articleNo: 0,
         subject: "",
         content: "",
       },
-      isUserName: false,
     };
   },
   props: {
     type: { type: String },
   },
   created() {
-    // if (this.type === "modify") {
-    //   axios.get(`/board/${this.$route.params.articleno}`).then(({ data }) => {
-    //     // this.article.articleno = data.article.articleno;
-    //     // this.article.userid = data.article.userid;
-    //     // this.article.subject = data.article.subject;
-    //     // this.article.content = data.article.content;
-    //     this.article = data;
-    //   });
-    //   this.isUserid = true;
-    // }
+    if (this.type === "modify") {
+      axios.post(`/board/view/${this.$route.params.articleNo}`).then(({ data }) => {
+        this.article = data.data;
+      });
+    }
   },
   methods: {
     onSubmit(event) {
@@ -74,12 +69,13 @@ export default {
     writeArticle() {
       axios
         .post(`/board/write`, {
+          userNo: this.article.userNo,
           subject: this.article.subject,
           content: this.article.content,
         })
         .then(({ data }) => {
           let msg = "등록 처리시 문제가 발생했습니다.";
-          if (data === "OK") {
+          if (data.status === "OK") {
             msg = "등록이 완료되었습니다.";
           }
           alert(msg);
@@ -95,7 +91,7 @@ export default {
         })
         .then(({ data }) => {
           let msg = "수정 처리시 문제가 발생했습니다.";
-          if (data === "OK") {
+          if (data.status === "OK") {
             msg = "수정이 완료되었습니다.";
           }
           alert(msg);
