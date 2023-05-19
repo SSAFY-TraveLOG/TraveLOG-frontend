@@ -12,6 +12,10 @@ let setUserName = ({ commit }, data) => {
     commit("UserName", data);
 };
 
+let setAttractions = ({ commit }, data) => {
+    commit("Attractions", data);
+};
+
 // 백엔드에서 반환한 결과값을 가지고 로그인 성공 실패 여부를 vuex에 넣어준다.
 let processResponse = (store, response) => {
     setUserId(store, response.userId);
@@ -48,7 +52,32 @@ const logoutApi = async (store) => {
     console.log(store);
 };
 
+const searchAttractions = async (store, { sidoCode, gugunCode, contentTypeId, word }) => {
+    let query = `/attraction/search?`
+    if (sidoCode != null) {
+        query += `sido-code=${sidoCode}&`;
+    }
+    if (gugunCode != null) {
+        query += `gugun-code=${gugunCode}&`;
+    }
+    if (contentTypeId != null) {
+        query += `content-type-id=${contentTypeId}&`;
+    }
+    if (word != null) {
+        query += `word=${word}&`;
+    }
+    axios.get(query.slice(0, -1))
+      .then(({data}) => {
+        console.log(query.slice(0, -1))
+        console.log(`searchAttractions`)
+        console.log(sidoCode, gugunCode, contentTypeId, word);
+        console.log(data)
+        setAttractions(store, data.data);
+      });
+};
+
 export default {
     loginApi,
     logoutApi,
+    searchAttractions,
 };

@@ -21,7 +21,20 @@ const routes = [
         path: "/attraction",
         name: "attraction",
         component: AttractionPage,
-        meta: { requiresAuth: true },
+        children: [
+            {
+                path: "search",
+                name: "attractionSearch",
+                component: () => import("@/components/attraction/AttractionList.vue"),
+                meta: { requiresAuth: true },
+            },
+            {
+                path: ":articleNo",
+                name: "attractionDetail",
+                component: () => import("@/components/attraction/AttractionDetail.vue"),
+                meta: { requiresAuth: true },
+            },
+        ],
     },
     {
         path: "/board",

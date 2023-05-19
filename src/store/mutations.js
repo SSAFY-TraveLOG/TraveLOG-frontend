@@ -8,4 +8,7 @@ export default {
     ["UserName"](state, userName) {
         state.userName = userName;
     },
+    ["Attractions"](state, attractions) {
+        state.attractions = attractions;
+    },
 };
