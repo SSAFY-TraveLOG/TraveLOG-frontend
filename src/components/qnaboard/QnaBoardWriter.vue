@@ -1,8 +1,7 @@
 <template>
-    <div>
-        <div>꿀팁 내놔</div>
-        <qna-board-input-item type="write"></qna-board-input-item>
-    </div>
+  <div>
+    <qna-board-input-item type="write"></qna-board-input-item>
+  </div>
 </template>
 
 <script>
@@ -13,5 +12,5 @@ export default {
   components: {
     QnaBoardInputItem,
   },
-}
+};
 </script>
