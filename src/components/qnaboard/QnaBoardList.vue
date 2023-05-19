@@ -1,5 +1,12 @@
 <template>
-  <v-container class="d-flex flex-column">
+  <v-sheet
+    class="ma-5 pa-4 d-flex flex-column"
+    color="white"
+    elevation="5"
+    min-height="800px"
+    rounded
+  >
+    <h1 class="align-self-center mb-5">Q&A 게시판</h1>
     <v-sheet
       class="d-flex flex-row align-center align-self-center justify-center ma-1"
       color="white"
@@ -21,6 +28,7 @@
         hide-details="true"
         v-model="search"
         label="Search"
+        clearable
         solo
         single-line
       >
@@ -40,14 +48,13 @@
       ></v-data-table>
     </div>
     <div v-else>
-      <div class="d-flex flex-column" v-if="articles.length">
+      <div class="d-flex flex-column">
         <v-data-table
           style="width: 100%"
           :headers="headers"
-          :items="articles"
+          :items="emptyArticle"
           :items-per-page="10"
           :search="search"
-          @click:row="openDetail"
         ></v-data-table>
       </div>
     </div>
@@ -58,7 +65,7 @@
       @click="moveWrite()"
       >등록</v-btn
     >
-  </v-container>
+  </v-sheet>
 </template>
 
 <script>
@@ -74,7 +81,7 @@ export default {
     headers: [
       {
         text: "번호",
-        value: "articleNo",
+        value: "displayNo",
         sortable: false,
         width: "10%",
         align: "center",
@@ -112,6 +119,7 @@ export default {
     emptyArticle: [
       {
         articleNo: "",
+        displayNo: "",
         subject: "등록된 글이 없습니다.",
         userName: "",
         registerTime: "",
@@ -141,45 +149,47 @@ export default {
         userNo: this.userNo,
       }),
     }).then(({ data }) => {
-      console.log(data);
-      data.data.forEach((element) => {
-        if (element.registerTime == "") return "";
+      let idx = 1;
+      if (data.data != null) {
+        data.data.forEach((element) => {
+          element.displayNo = idx++;
+          if (element.registerTime == "") return "";
 
-        let jsDate = new Date(element.registerTime);
+          let jsDate = new Date(element.registerTime);
 
-        let year = jsDate.getFullYear();
-        let month = jsDate.getMonth() + 1;
-        let date = jsDate.getDate();
+          let year = jsDate.getFullYear();
+          let month = jsDate.getMonth() + 1;
+          let date = jsDate.getDate();
 
-        if (month < 10) {
-          month = "0" + month;
-        }
-        if (date < 10) {
-          date = "0" + date;
-        }
+          if (month < 10) {
+            month = "0" + month;
+          }
+          if (date < 10) {
+            date = "0" + date;
+          }
 
-        element.registerTime = year + "-" + month + "-" + date;
-      });
+          element.registerTime = year + "-" + month + "-" + date;
+        });
 
-      data.data.forEach((element) => {
-        if (element.modifiedTime == "") return "";
+        data.data.forEach((element) => {
+          if (element.modifiedTime == "") return "";
 
-        let jsDate = new Date(element.modifiedTime);
+          let jsDate = new Date(element.modifiedTime);
 
-        let year = jsDate.getFullYear();
-        let month = jsDate.getMonth() + 1;
-        let date = jsDate.getDate();
+          let year = jsDate.getFullYear();
+          let month = jsDate.getMonth() + 1;
+          let date = jsDate.getDate();
 
-        if (month < 10) {
-          month = "0" + month;
-        }
-        if (date < 10) {
-          date = "0" + date;
-        }
+          if (month < 10) {
+            month = "0" + month;
+          }
+          if (date < 10) {
+            date = "0" + date;
+          }
 
-        element.modifiedTime = year + "-" + month + "-" + date;
-      });
-
+          element.modifiedTime = year + "-" + month + "-" + date;
+        });
+      }
       this.articles = data.data;
     });
   },
