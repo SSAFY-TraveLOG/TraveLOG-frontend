@@ -255,6 +255,10 @@ export default {
       this.$router.push({ name: "qnaBoardWriter" });
     },
     openDetail(val) {
+      if (val.userNo === -1) {
+        alert("열람 권한이 없습니다.");
+        return;
+      }
       this.$router.push({
         name: "qnaBoardDetail",
         params: { articleNo: val.articleNo },

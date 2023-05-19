@@ -28,10 +28,20 @@
           height="500px"
           outlined
         ></v-textarea>
-        <v-container class="d-flex flex-row justify-end">
+        <v-container class="d-flex flex-row justify-space-between align-center">
           <v-btn type="reset" class="mr-6"> 목록 </v-btn>
-          <v-btn type="submit" v-if="this.type == 'write'"> 등록 </v-btn>
-          <v-btn type="submit" v-else> 수정 </v-btn>
+          <v-container class="d-flex flex-row justify-end align-center">
+            <v-checkbox
+              v-model="secret"
+              :value="article.secret"
+              class="mr-6"
+              hide-details="true"
+              label="비밀글"
+              dense
+            ></v-checkbox>
+            <v-btn type="submit" v-if="this.type == 'write'"> 등록 </v-btn>
+            <v-btn type="submit" v-else> 수정 </v-btn>
+          </v-container>
         </v-container>
       </form>
     </v-container>
@@ -40,7 +50,7 @@
 
 <script>
 import axios from "@/util/axios";
-import { mapGetters } from 'vuex';
+import { mapGetters } from "vuex";
 
 export default {
   name: "QnaBoardInputItem",
@@ -52,8 +62,9 @@ export default {
         articleNo: 0,
         subject: "",
         content: "",
+        secret: false
       },
-      isUserName: false,
+      secret: false,
     };
   },
   props: {
@@ -62,14 +73,17 @@ export default {
   created() {
     if (this.type === "modify") {
       console.log(this.$route.params.articleNo);
-      axios.post(`/qna/view/${this.$route.params.articleNo}`, {
-        userNo: this.userNo
-      }).then(({ data }) => {
-        console.log(data);
-        this.article.articleNo = data.data.articleNo;
-        this.article.subject = data.data.subject;
-        this.article.content = data.data.content;
-      });
+      axios
+        .post(`/qna/view/${this.$route.params.articleNo}`, {
+          userNo: this.userNo,
+        })
+        .then(({ data }) => {
+          console.log(data);
+          this.article.articleNo = data.data.articleNo;
+          this.article.subject = data.data.subject;
+          this.article.content = data.data.content;
+          this.article.secret = data.data.secret == 1 ? true : false;
+        });
     }
   },
   methods: {
@@ -100,6 +114,7 @@ export default {
           userNo: this.userNo,
           subject: this.article.subject,
           content: this.article.content,
+          secret: this.secret === true ? 1 : null
         })
         .then(({ data }) => {
           console.log(data);
@@ -117,7 +132,8 @@ export default {
           articleNo: this.article.articleNo,
           subject: this.article.subject,
           content: this.article.content,
-          userNo: this.userNo
+          userNo: this.userNo,
+          secret: this.secret === true ? 1 : null
         })
         .then(({ data }) => {
           console.log(data);
@@ -136,7 +152,7 @@ export default {
   },
   computed: {
     ...mapGetters({ userNo: "getUserNo" }),
-  }
+  },
 };
 </script>
 
