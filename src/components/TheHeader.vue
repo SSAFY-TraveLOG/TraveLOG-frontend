@@ -18,6 +18,9 @@
             <router-link class="linking" to="/board">게시판</router-link>
           </div>
           <div class="menuItem">
+            <router-link class="linking" to="/qna">Q&A 게시판</router-link>
+          </div>
+          <div class="menuItem">
             <button class="linking" @click="logout">로그아웃</button>
           </div>
         </div>
@@ -29,6 +32,9 @@
           </div>
           <div class="menuItem">
             <router-link class="linking" to="/board">게시판</router-link>
+          </div>
+          <div class="menuItem">
+            <router-link class="linking" to="/qna">Q&A 게시판</router-link>
           </div>
           <div class="menuItem">
             <router-link class="linking" to="/login">로그인</router-link>
