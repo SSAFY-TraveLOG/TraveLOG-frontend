@@ -1,20 +1,55 @@
 <template>
-  <div>
-    <h2>Login</h2>
-    <div>
-      <div>ID</div>
-      <input placeholder="ID를 입력하세요." v-model="userId" />
-    </div>
-    <div>
-      <div>Password</div>
-      <input
-        type="password"
-        placeholder="비밀번호를 입력하세요."
-        v-model="password"
-      />
-    </div>
-    <button @click="login">로그인</button>
-  </div>
+  <v-app id="inspire">
+    <v-main class="blue-white lighten-4">
+      <v-container style="max-width: 450px" fill-height>
+        <v-layout align-center row wrap>
+          <v-flex xs12>
+            <v-card>
+              <div class="pa-10">
+                <h1 style="text-align: center" class="mb-10">로그인</h1>
+                <form>
+                  <v-text-field
+                    label="아이디"
+                    placeholder="아이디를 입력하세요."
+                    v-model="userId"
+                  ></v-text-field>
+                  <v-text-field
+                    type="password"
+                    label="비밀번호"
+                    placeholder="비밀번호를 입력하세요."
+                    v-model="password"
+                  >
+                  </v-text-field>
+                  <v-btn
+                    color="blue lighten-1 text-capitalize"
+                    depressed
+                    large
+                    block
+                    dark
+                    class="mb-3"
+                    @click="login"
+                  >
+                    로그인
+                  </v-btn>
+                  <v-btn
+                    color="blue lighten-1 text-capitalize"
+                    depressed
+                    large
+                    block
+                    dark
+                    class="mb-3"
+                    @click="join"
+                  >
+                    회원가입
+                  </v-btn>
+                </form>
+              </div>
+            </v-card>
+          </v-flex>
+        </v-layout>
+      </v-container>
+    </v-main>
+  </v-app>
 </template>
 
 <script>
@@ -39,6 +74,9 @@ export default {
       }).then(() => {
         this.$router.push("/");
       });
+    },
+    join() {
+      this.$router.push("/user/join");
     },
   },
 };
