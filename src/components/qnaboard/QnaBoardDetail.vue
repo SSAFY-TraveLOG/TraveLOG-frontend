@@ -40,7 +40,7 @@ import axios from "@/util/axios";
 import { mapGetters } from "vuex";
 
 export default {
-  name: "BoardDetail",
+  name: "QnaBoardDetail",
   data() {
     return {
       article: {},
@@ -55,26 +55,28 @@ export default {
     ...mapGetters({ userNo: "getUserNo" }),
   },
   created() {
+    console.log(this.$route.params.articleNo);
     axios
-      .post(`/board/view/${this.$route.params.articleNo}`)
+      .post(`/qna/view/${this.$route.params.articleNo}`, { userNo: this.userNo })
       .then(({ data }) => {
+        console.log(data);
         this.article = data.data;
       });
   },
   methods: {
     listArticle() {
-      this.$router.push({ name: "boardList" });
+      this.$router.push({ name: "qnaBoardList" });
     },
     moveModifyArticle() {
       this.$router.replace({
-        name: "boardModify",
+        name: "qnaBoardModify",
         params: { articleNo: this.article.articleNo },
       });
     },
     deleteArticle() {
       if (confirm("정말로 삭제하시겠습니까?")) {
         this.$router.replace({
-          name: "boardDelete",
+          name: "qnaBoardDelete",
           params: { articleNo: this.article.articleNo },
         });
       }

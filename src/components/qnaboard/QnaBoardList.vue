@@ -6,7 +6,7 @@
     min-height="800px"
     rounded
   >
-    <h1 class="align-self-center mb-5">자유게시판</h1>
+    <h1 class="align-self-center mb-5">Q&A 게시판</h1>
     <v-sheet
       class="d-flex flex-row align-center align-self-center justify-center ma-1"
       color="white"
@@ -67,11 +67,13 @@
     >
   </v-sheet>
 </template>
+
 <script>
 import axios from "@/util/axios";
+import { mapGetters } from "vuex";
 
 export default {
-  name: "BoardList",
+  name: "QnaBoardList",
   components: {},
   data: () => ({
     searchKey: "",
@@ -141,8 +143,11 @@ export default {
   }),
   created() {
     axios({
-      url: "/board/search",
-      method: "get",
+      url: "/qna/search",
+      method: "post",
+      data: JSON.stringify({
+        userNo: this.userNo,
+      }),
     }).then(({ data }) => {
       let idx = 1;
       if (data.data != null) {
@@ -247,14 +252,21 @@ export default {
       });
     },
     moveWrite() {
-      this.$router.push({ name: "boardWriter" });
+      this.$router.push({ name: "qnaBoardWriter" });
     },
     openDetail(val) {
+      if (val.userNo === -1) {
+        alert("열람 권한이 없습니다.");
+        return;
+      }
       this.$router.push({
-        name: "boardDetail",
+        name: "qnaBoardDetail",
         params: { articleNo: val.articleNo },
       });
     },
+  },
+  computed: {
+    ...mapGetters({ userNo: "getUserNo" }),
   },
 };
 </script>

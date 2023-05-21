@@ -1,6 +1,5 @@
 <template>
     <div>
-        <div>꿀팁 내놔</div>
         <board-input-item type="write"></board-input-item>
     </div>
 </template>
