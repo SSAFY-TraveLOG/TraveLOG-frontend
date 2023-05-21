@@ -10,7 +10,6 @@ const state = {
     userId: "",
     userName: "",
     userNo: "",
-    attractions: [],
 };
 
 export default new Vuex.Store({
