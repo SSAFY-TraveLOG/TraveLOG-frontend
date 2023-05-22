@@ -35,8 +35,8 @@
                   >
                   </v-text-field>
                   <div v-show="passwordErr" class="input-error">
-                    비밀번호는 8자리 이상, 16자리 이하의 영문자, 숫자가
-                    포함되어야 합니다.
+                    비밀번호는 8자리 이상, 16자리 이하의 영문자, 숫자,
+                    특수문자가 포함되어야 합니다.
                   </div>
                   <v-text-field
                     type="email"
@@ -68,59 +68,6 @@
     </v-main>
   </v-app>
 </template>
-<!--
-<template>
-  <div>
-    <div>
-      아이디
-      <input placeholder="ID를 입력하세요." v-model="userId" />
-      <div v-show="userIdErr" class="input-error">
-        아이디는 4자리 이상, 20자리 이하로 영대소문자, 숫자를 사용할 수 있으며
-        숫자로 시작할 수 없습니다.
-      </div>
-    </div>
-    <div>
-      이름
-      <input placeholder="이름을 입력하세요." v-model="userName" />
-      <div v-show="userNameErr" class="input-error">
-        이름은 2자리 이상, 15자리 이하로 영대소문자, 한글, 숫자를 사용할 수
-        있습니다.
-      </div>
-    </div>
-    <div>
-      비밀번호
-      <input
-        type="password"
-        placeholder="비밀번호를 입력하세요."
-        v-model="password"
-      />
-      <div v-show="passwordErr" class="input-error">
-        비밀번호는 8자리 이상, 16자리 이하의 영문자, 숫자가 포함되어야 합니다.
-      </div>
-    </div>
-    <div>
-      이메일
-      <input placeholder="이메일을 입력하세요." v-model="email" />
-      <div v-show="emailErr" class="input-error">
-        이메일이 형식에 맞지 않습니다.
-      </div>
-    </div>
-
-    <button @click="join">회원가입 버튼</button>
-
-    <template>
-      <div class="text-center">
-        <v-snackbar v-model="snackbar" :timeout="timeout">
-          {{ text }}
-          <v-btn color="blue" variant="text" @click="snackbar = false">
-            닫기
-          </v-btn>
-        </v-snackbar>
-      </div>
-    </template>
-  </div>
-</template>
--->
 
 <script>
 import axios from "@/util/axios";
