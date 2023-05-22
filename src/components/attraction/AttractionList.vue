@@ -65,6 +65,9 @@
         >검색</v-btn
       >
     </v-sheet>
+
+    <KakaoMap ref="kakaoMapRef"/>
+
     <div class="d-flex flex-column" v-if="attractions.length">
       <v-data-table
         class="align-self-center"
@@ -72,9 +75,10 @@
         :headers="headers"
         :items="attractions"
         :items-per-page="10"
+        
       >
         <template v-slot:item="{item}">
-          <tr :key="item.contentId">
+          <tr :key="item.contentId" @click="moveCenter(item.displayNo)">
             <td>{{item.displayNo}}</td>
             <AttractionTitle :contentId="item.contentId"/>
             <td>{{item.addr1}}</td>
@@ -90,22 +94,23 @@
           :headers="headers"
           :items="emptyAttraction"
           :items-per-page="10"
-          loading
-          loading-text="Loading... Please wait"
         ></v-data-table>
       </div>
     </div>
   </v-sheet>
 </template>
+
 <script>
 import axios from "@/util/axios";
 import AttractionTitle from "@/components/attraction/AttractionTitle"
+import KakaoMap from '@/components/attraction/KakaoMap';
 
 export default {
   name: "AttractionList",
   components: {
     AttractionTitle,
-  },
+    KakaoMap,
+},
   data: () => ({
     dialog: false,
     headers: [
@@ -234,7 +239,7 @@ export default {
       contentTypeId: null,
       sidoCode: null,
       gugunCode: null,
-      word: null
+      word: null,
   }),
   created() {
     axios.get("/attraction/search")
@@ -246,6 +251,7 @@ export default {
         });
       }
       this.attractions = data.data;
+      this.$refs.kakaoMapRef.loadMap(this.attractions);
     });
   },
   methods: {
@@ -279,8 +285,13 @@ export default {
           })
         }
         this.attractions = data.data;
+        this.$refs.kakaoMapRef.loadMap(this.attractions);
       });
     },
+    moveCenter(index) {
+      index--;
+      this.$refs.kakaoMapRef.moveCenter(this.attractions[index].latitude, this.attractions[index].longitude);
+    }
   },
 };
 </script>

@@ -59,10 +59,10 @@ export default {
     }
   },
   created() {
-      axios.get(`/attraction/${this.contentId}`)
-      .then(({data}) => {
-        this.description = data.data;
-      });
+    axios.get(`/attraction/${this.contentId}`)
+    .then(({data}) => {
+      this.description = data.data;
+    });
   }
 }
 </script>
