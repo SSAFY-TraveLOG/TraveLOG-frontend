@@ -14,10 +14,10 @@ let setUserName = ({ commit }, data) => {
 
 // 백엔드에서 반환한 결과값을 가지고 로그인 성공 실패 여부를 vuex에 넣어준다.
 let processResponse = (store, response) => {
+  console.log(response);
   setUserId(store, response.userId);
   setUserNo(store, response.userNo);
   setUserName(store, response.userName);
-  // localStorage.setItem('user',JSON.stringify(userData));
   axios.defaults.headers.common[
     "Authorization"
   ] = `Bearer ${response.token.accessToken}`;
@@ -32,6 +32,7 @@ const loginApi = async (store, { userId, password }) => {
       password: password,
     })
     .then((response) => {
+      console.log(response);
       processResponse(store, response.data.data);
     });
 
@@ -39,7 +40,6 @@ const loginApi = async (store, { userId, password }) => {
 };
 
 const logoutApi = async (store) => {
-  console.log("logoutApi");
   localStorage.removeItem("accessToken");
   localStorage.removeItem("refreshToken");
   setUserId(store, null);
@@ -47,11 +47,9 @@ const logoutApi = async (store) => {
   setUserName(store, null);
 
   delete axios.defaults.headers.common["Authorization"];
-
-  console.log(store);
 };
 
 export default {
-  loginApi,
-  logoutApi,
+    loginApi,
+    logoutApi,
 };
