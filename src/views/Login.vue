@@ -53,7 +53,7 @@
 </template>
 
 <script>
-// import axios from "@/util/axios";
+import axios from "@/util/axios";
 import { mapActions } from "vuex";
 export default {
   name: "LoginView",
@@ -66,14 +66,18 @@ export default {
   },
   created() {},
   methods: {
-    ...mapActions(["loginApi"]),
+    ...mapActions(["loginApi", "processLogin"]),
     login() {
-      this.loginApi({
-        userId: this.userId,
-        password: this.password,
-      }).then(() => {
-        this.$router.push("/");
-      });
+      axios
+        .post(`/auth/check`, {
+          userId: this.userId,
+          password: this.password,
+        })
+        .then((response) => {
+          this.processLogin(response.data.data).then(() => {
+            this.$router.push("/");
+          });
+        });
     },
     join() {
       this.$router.push("/user/join");
