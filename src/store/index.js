@@ -10,7 +10,11 @@ const state = {
   userId: "",
   userName: "",
   userNo: "",
+  travelTitle: "",
+  travelDesciption: "",
+  travelAuthority: 0,
   travelDate: [],
+  travelParticipants: [],
 };
 
 export default new Vuex.Store({
