@@ -11,12 +11,11 @@ export default {
     return {
       map: null,
       imageSrc: "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png",
+      markers: [],
     }
   },
   mounted() {
-    if (window.kakao && window.kakao.maps) {
-      this.loadMap();
-    } else {
+    if (!window.kakao || !window.kakao.maps) {
       this.loadScript();
     }
   },
@@ -38,14 +37,17 @@ export default {
       };
       this.map = new window.kakao.maps.Map(container, options);
       if (attractions.length)
-        this.loadMarker(attractions);
+        this.loadMarker(attractions.slice(0, Math.min(attractions.length, 10)));
     },
     loadMarker(attractions) {
+      this.markers.forEach((marker) => {
+        marker.setMap(null);
+      });
       const positions = [];
       attractions.forEach((attraction) => {
         positions.push({title: attraction.title, latlng: new window.kakao.maps.LatLng(attraction.latitude, attraction.longitude)});
       });
-      this.markers = [];
+      this.markers.splice(0);
       positions.forEach((position) => {
         const imageSize = new window.kakao.maps.Size(24, 35);
         const markerImage = new window.kakao.maps.MarkerImage(this.imageSrc, imageSize);
@@ -56,6 +58,7 @@ export default {
           image: markerImage,
         });
         marker.setMap(this.map);
+        this.markers.push(marker);
       });
       this.moveCenter(positions[0].latlng.getLat(), positions[0].latlng.getLng());
     },
