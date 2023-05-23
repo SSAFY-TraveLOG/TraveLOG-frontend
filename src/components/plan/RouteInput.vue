@@ -70,17 +70,23 @@
               :headers="headers"
               :items="attractions"
               :items-per-page="10"
-              :loading="loading"
+              hide-default-footer
+              :page.sync="page"
+              @page-count="pageCount = $event"
             >
               <template v-slot:item="{item}">
-                <tr :key="item.contentId" @click="moveCenter(item.displayNo)">
+                <tr :key="item.contentId">
                   <td>{{item.displayNo}}</td>
-                  <td>{{item.titie}}</td>
+                  <td @click="moveCenter(item.displayNo)">{{item.titie}}</td>
                   <td>{{item.addr1}}</td>
                   <td>{{item.attractionLike}}</td>
+                  <td><v-btn @click="addRoute(item.contentId)">추가</v-btn></td>
                 </tr>
               </template>
             </v-data-table>
+            <div class="text-center pt-2">
+              <v-pagination v-model="page" total-visible="7" :length="pageCount"></v-pagination>
+            </div>
           </div>
           <div v-else>
             <div class="d-flex flex-column">
@@ -96,6 +102,23 @@
         </v-col>
         <v-col cols="6">
           <h1 style="width:auto" class="align-self-center">여행 경로 리스트</h1>
+          <div v-for="i in duration" :key="i">
+            <v-card @click="focus=i" :class="{ 'active': focus === i }">
+              <v-card-title>Day {{i}}</v-card-title>
+              <v-card-subtitle>{{days[i-1]}}</v-card-subtitle>
+              <v-data-table
+                :items="routes[i-1]"
+                hide-default-header
+                hide-default-footer
+              >
+                <template v-slot:item="{item}">
+                <tr :key="item.contentId">
+                  <td>{{item.contentId}}</td>
+                </tr>
+              </template>
+              </v-data-table>
+            </v-card>
+          </div>
         </v-col>
       </v-row>
     </v-container>
@@ -115,6 +138,10 @@ export default {
   },
   data() {
     return {
+      page: 1,
+      pageCount: 0,
+      focus: 1,
+      days: [],
       headers: [
         {
           text: "번호",
@@ -140,6 +167,12 @@ export default {
         {
           text: "저장",
           value: "attractionLike",
+          sortable: false,
+          width: "10%",
+          align: "center",
+        },
+        {
+          text: "추가",
           sortable: false,
           width: "10%",
           align: "center",
@@ -242,7 +275,8 @@ export default {
       sidoCode: null,
       gugunCode: null,
       word: null,
-      loading: true,
+      duration: 0,
+      routes: [],
     };
   },
   created() {
@@ -257,6 +291,18 @@ export default {
       this.attractions = data.data;
       this.$refs.kakaoMapRef.loadMap(this.attractions);
     });
+
+    this.duration = Math.floor((new Date(this.travelDate[1]) - new Date(this.travelDate[0]))/1000/60/60/24) + 1;
+
+    const startDate = new Date(this.travelDate[0]);
+    for (let i = 0; i < this.duration; i++) {
+      const currentDate = new Date(startDate);
+      currentDate.setDate(startDate.getDate() + i);
+      this.days.push(currentDate.toISOString().slice(0, 10));
+
+      this.routes.push([]);
+    }
+    console.log(this.routes)
   },
   methods: {
     getGuguns() {
@@ -289,18 +335,31 @@ export default {
           })
         }
         this.attractions = data.data;
-        this.$refs.kakaoMapRef.loadMap(this.attractions);
+        this.page = 1;
+        this.$refs.kakaoMapRef.loadMarker(this.attractions.slice(this.page*10-10, Math.min(this.attractions.length, this.page*10)));
       });
     },
+    addRoute(contentId) {
+      this.routes[this.focus-1].push({contentId:contentId});
+      console.log(this.routes)
+    }
   },
   computed: {
     ...mapGetters({ travelDate: "getTravelDate" }),
   },
+  watch: {
+    page(newPage) {
+      this.$refs.kakaoMapRef.loadMarker(this.attractions.slice(newPage*10-10, Math.min(this.attractions.length, newPage*10)));
+    }
+  }
 };
 </script>
 
 <style scoped>
 .col {
   padding: 6px;
+}
+.active {
+  background-color: yellow;
 }
 </style>
