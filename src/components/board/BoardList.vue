@@ -39,13 +39,19 @@
     </v-sheet>
     <div class="d-flex flex-column" v-if="articles.length">
       <v-data-table
-        class="align-self-center"
+        class="align-self-center elevation-1"
         style="width: 100%"
         :headers="headers"
         :items="articles"
         :items-per-page="10"
+        hide-default-footer
+        :page.sync="page"
         @click:row="openDetail"
+        @page-count="pageCount = $event"
       ></v-data-table>
+      <div class="text-center pt-2">
+        <v-pagination v-model="page" :total-visible="7" :length="pageCount"> </v-pagination>
+      </div>
     </div>
     <div v-else>
       <div class="d-flex flex-column">
@@ -74,6 +80,9 @@ export default {
   name: "BoardList",
   components: {},
   data: () => ({
+    page: 1,
+    pageCount: 0,
+    itemsPerPage: 10,
     searchKey: "",
     search: "",
     headers: [
