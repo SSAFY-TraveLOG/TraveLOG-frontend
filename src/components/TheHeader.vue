@@ -15,6 +15,11 @@
             >
           </div>
           <div class="menuItem">
+            <router-link class="linking" to="/plan"
+              >여행 일정 만들기</router-link
+            >
+          </div>
+          <div class="menuItem">
             <router-link class="linking" to="/board">게시판</router-link>
           </div>
           <div class="menuItem">
@@ -28,6 +33,11 @@
           <div class="menuItem">
             <router-link class="linking" to="/attraction"
               >관광지 알아보기</router-link
+            >
+          </div>
+          <div class="menuItem">
+            <router-link class="linking" to="/plan"
+              >여행 일정 만들기</router-link
             >
           </div>
           <div class="menuItem">
@@ -119,7 +129,7 @@ header {
 }
 
 .menu {
-  width: 400px;
+  width: 600px;
   /* background-color: pink; */
   display: flex;
   align-items: center;
