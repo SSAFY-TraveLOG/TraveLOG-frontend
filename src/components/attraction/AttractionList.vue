@@ -75,7 +75,8 @@
         :headers="headers"
         :items="attractions"
         :items-per-page="10"
-        
+        :page.sync="page"
+        @page-count="pageCount = $event"
       >
         <template v-slot:item="{item}">
           <tr :key="item.contentId" @click="moveCenter(item.displayNo)">
@@ -86,6 +87,9 @@
           </tr>
         </template>
       </v-data-table>
+      <div class="text-center pt-2">
+        <v-pagination v-model="page" total-visible="7" :length="pageCount"></v-pagination>
+      </div>
     </div>
     <div v-else>
       <div class="d-flex flex-column">
@@ -112,6 +116,8 @@ export default {
     KakaoMap,
 },
   data: () => ({
+    page: 1,
+    pageCount: 0,
     dialog: false,
     headers: [
       {
@@ -285,7 +291,8 @@ export default {
           })
         }
         this.attractions = data.data;
-        this.$refs.kakaoMapRef.loadMap(this.attractions);
+        this.page = 1;
+        this.$refs.kakaoMapRef.loadMarker(this.attractions.slice(this.page*10-10, Math.min(this.attractions.length, this.page*10)));
       });
     },
     moveCenter(index) {
@@ -293,5 +300,10 @@ export default {
       this.$refs.kakaoMapRef.moveCenter(this.attractions[index].latitude, this.attractions[index].longitude);
     }
   },
+  watch: {
+    page(newPage) {
+      this.$refs.kakaoMapRef.loadMarker(this.attractions.slice(newPage*10-10, Math.min(this.attractions.length, newPage*10)));
+    }
+  }
 };
 </script>
