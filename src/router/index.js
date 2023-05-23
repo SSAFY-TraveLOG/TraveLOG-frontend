@@ -121,12 +121,18 @@ const routes = [
         component: () => import("@/components/plan/PlanList.vue"),
         meta: { requiresAuth: true },
       },
-      // {
-      //   path: "write",
-      //   name: "planWriter",
-      //   component: () => import("@/components/plan/PlanWriter.vue"),
-      //   meta: { requiresAuth: true },
-      // },
+      {
+        path: "/write/info",
+        name: "planWriter",
+        component: () => import("@/components/plan/PlanWriter.vue"),
+        meta: { requiresAuth: true },
+      },
+      {
+        path: "/write/route",
+        name: "routeWriter",
+        component: () => import("@/components/plan/RouteWriter.vue"),
+        meta: { requiresAuth: true },
+      },
       // {
       //   path: "view/:planNo",
       //   name: "planDetail",
