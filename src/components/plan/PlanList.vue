@@ -9,11 +9,11 @@
     <h1 class="align-self-center mb-5">여행계획</h1>
     <v-btn @click="moveWrite">만들기</v-btn>
 
-    <h1>지난 여행</h1>
+    <h1 style="margin-top: 60px">지난 여행</h1>
     <v-sheet class="travel">
       <horizontal-scroll class="horizontal-scroll">
-        <div v-if="previousPlans.length">
-          <div class="outer" v-for="previousPlan in previousPlans" :key="previousPlan.planNo">
+        <div class="outer" v-if="previousPlans.length">
+          <div class="inner-content" v-for="previousPlan in previousPlans" :key="previousPlan.planNo">
             <PlanCard :plan="previousPlan"/>
           </div>
         </div>
@@ -23,11 +23,11 @@
       </horizontal-scroll>
     </v-sheet>
 
-    <h1 class="align-self-center mb-5">앞으로의 여행</h1>
+    <h1 style="margin-top: 60px">앞으로의 여행</h1>
     <v-sheet class="travel">
       <horizontal-scroll class="horizontal-scroll">
-        <div v-if="futurePlans.length">
-          <div class="outer" v-for="futurePlan in futurePlans" :key="futurePlan.planNo">
+        <div class="outer" v-if="futurePlans.length">
+          <div class="inner-content" v-for="futurePlan in futurePlans" :key="futurePlan.planNo">
             <PlanCard :plan="futurePlan"/>
           </div>
         </div>
@@ -61,18 +61,29 @@ export default {
   created() {
     this.previousPlans.splice(0);
     this.futurePlans.splice(0);
-    console.log(this.userNo);
     axios.get(`/plan/list/${this.userNo}`)
     .then(({data}) => {
       const currentDate = new Date();
+      let curDate = currentDate.getFullYear() + "-";
+      if (currentDate.getMonth()+1 < 10) {
+        curDate += "0"
+      }
+      curDate += (currentDate.getMonth()+1) + "-" + currentDate.getDate();
       data.data.forEach(plan => {
-        if (new Date(plan.endDate) < currentDate) {
+        if (plan.endDate < curDate) {
           this.previousPlans.push(plan);
         } else {
           this.futurePlans.push(plan);
         }
       });
+      this.previousPlans.sort(function(a, b) {
+      return b.endDate.localeCompare(a.endDate);
+      });
+      this.futurePlans.sort(function(a, b) {
+        return a.startDate.localeCompare(b.startDate);
+      });
     });
+    
   },
   computed: {
     ...mapGetters({ userNo: "getUserNo" }),
@@ -92,7 +103,7 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
+  margin-top: 10px;
 }
 
 .horizontal-scroll {
@@ -115,10 +126,8 @@ export default {
   flex-shrink: 0;
   align-items: center;
   justify-content: center;
-  width: 100px;
-  height: calc(100% - 40px);
-  border: solid 1px #2c3e50;
-  border-radius: 5px;
+  width: 400px;
+  height: 100%;
 }
 
 .inner-content:not(:first-of-type) {
