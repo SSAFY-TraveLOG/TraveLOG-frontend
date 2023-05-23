@@ -75,6 +75,7 @@
         :headers="headers"
         :items="attractions"
         :items-per-page="10"
+        hide-default-footer
         :page.sync="page"
         @page-count="pageCount = $event"
       >
