@@ -7,14 +7,19 @@ import mutations from "./mutations";
 Vue.use(Vuex);
 
 const state = {
-    userId: "",
-    userName: "",
-    userNo: "",
+  userId: "",
+  userName: "",
+  userNo: "",
+  travelTitle: "",
+  travelDesciption: "",
+  travelAuthority: 0,
+  travelDate: [],
+  travelParticipants: [],
 };
 
 export default new Vuex.Store({
-    state,
-    mutations,
-    getters,
-    actions,
+  state,
+  mutations,
+  getters,
+  actions,
 });
