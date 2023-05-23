@@ -46,11 +46,40 @@
         :items-per-page="10"
         hide-default-footer
         :page.sync="page"
-        @click:row="openDetail"
         @page-count="pageCount = $event"
-      ></v-data-table>
+      >
+        <template #[`item`]="{ item }">
+          <tr>
+            <td>
+              <v-icon
+                @click="hateArticle(item.articleNo)"
+                color="pink"
+                v-if="item.like"
+                >mdi-heart</v-icon
+              >
+              <v-icon @click="likeArticle(item.articleNo)" v-else
+                >mdi-heart-outline</v-icon
+              >
+            </td>
+            <td class="text-center" @click="openDetail(item.articleNo)">
+              {{ item.displayNo }}
+            </td>
+            <td @click="openDetail(item.articleNo)">{{ item.subject }}</td>
+            <td class="text-center" @click="openDetail(item.articleNo)">
+              {{ item.userName }}
+            </td>
+            <td class="text-center" @click="openDetail(item.articleNo)">
+              {{ item.registerTime }}
+            </td>
+            <td class="text-center" @click="openDetail(item.articleNo)">
+              {{ item.readCount }}
+            </td>
+          </tr>
+        </template>
+      </v-data-table>
       <div class="text-center pt-2">
-        <v-pagination v-model="page" :total-visible="7" :length="pageCount"> </v-pagination>
+        <v-pagination v-model="page" :total-visible="7" :length="pageCount">
+        </v-pagination>
       </div>
     </div>
     <div v-else>
@@ -61,7 +90,8 @@
           :items="emptyArticle"
           :items-per-page="10"
           :search="search"
-        ></v-data-table>
+        >
+        </v-data-table>
       </div>
     </div>
     <v-btn
@@ -75,6 +105,7 @@
 </template>
 <script>
 import axios from "@/util/axios";
+import { mapGetters } from "vuex";
 
 export default {
   name: "BoardList",
@@ -87,10 +118,17 @@ export default {
     search: "",
     headers: [
       {
+        text: "",
+        align: "center",
+        sortable: false,
+        value: "image",
+        width: "2%",
+      },
+      {
         text: "번호",
         value: "displayNo",
         sortable: false,
-        width: "10%",
+        width: "8%",
         align: "center",
       },
       {
@@ -98,7 +136,7 @@ export default {
         value: "subject",
         sortable: false,
         width: "55%",
-        align: "start",
+        align: "center",
       },
       {
         text: "작성자",
@@ -194,7 +232,18 @@ export default {
           element.modifiedTime = year + "-" + month + "-" + date;
         });
       }
-      this.articles = data.data;
+      let articles = data.data;
+
+      axios.get(`/like/user/article/${this.userNo}`).then(({ data }) => {
+        let likeArr = data.data;
+        articles.forEach((article) => {
+          if (likeArr.includes(article.articleNo.toString())) {
+            article.like = 1;
+          } else article.like = 0;
+        });
+
+        this.articles = articles;
+      });
     });
   },
   methods: {
@@ -261,9 +310,29 @@ export default {
     openDetail(val) {
       this.$router.push({
         name: "boardDetail",
-        params: { articleNo: val.articleNo },
+        params: { articleNo: val },
       });
     },
+    likeArticle(articleNo) {
+      axios
+        .post("/like/article", { userNo: this.userNo, articleNo: articleNo })
+        .then(() => {
+          location.reload();
+        });
+    },
+    hateArticle(articleNo) {
+      axios
+        .post("/like/article/delete", {
+          userNo: this.userNo,
+          articleNo: articleNo,
+        })
+        .then(() => {
+          location.reload();
+        });
+    },
+  },
+  computed: {
+    ...mapGetters({ userNo: "getUserNo" }),
   },
 };
 </script>
