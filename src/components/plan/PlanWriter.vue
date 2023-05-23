@@ -1,7 +1,6 @@
 <template>
   <div>
     <plan-input />
-    <button @click="moveRoute">경로 입력하기</button>
   </div>
 </template>
 
@@ -16,11 +15,7 @@ export default {
     };
   },
   created() {},
-  methods: {
-    moveRoute() {
-      this.$router.push({ name: "routeWriter" });
-    },
-  },
+  methods: {},
 };
 </script>
 

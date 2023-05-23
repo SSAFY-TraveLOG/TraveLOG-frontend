@@ -12,6 +12,11 @@ let setUserName = ({ commit }, data) => {
   commit("UserName", data);
 };
 
+let setTravelDate = (store, data) => {
+  store.commit("TravelDate", data);
+  console.log(store);
+};
+
 // 백엔드에서 반환한 결과값을 가지고 로그인 성공 실패 여부를 vuex에 넣어준다.
 let processResponse = (store, response) => {
   console.log(response);
@@ -50,6 +55,7 @@ const logoutApi = async (store) => {
 };
 
 export default {
-    loginApi,
-    logoutApi,
+  loginApi,
+  logoutApi,
+  setTravelDate,
 };

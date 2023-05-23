@@ -1,8 +1,11 @@
 <template>
-  <div>경로 입력받기</div>
+  <div>
+    <div>{{ travelDate }}</div>
+  </div>
 </template>
 
 <script>
+import { mapGetters } from "vuex";
 export default {
   name: "RouteInput",
   components: {},
@@ -13,6 +16,9 @@ export default {
   },
   created() {},
   methods: {},
+  computed: {
+    ...mapGetters({ travelDate: "getTravelDate" }),
+  },
 };
 </script>
 

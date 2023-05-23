@@ -24,20 +24,19 @@
       <template>
         <v-row>
           <v-col cols="12" sm="6">
-            <v-date-picker
-              v-model="dates"
-              range
-              no-title="true"
-            ></v-date-picker>
+            <v-date-picker v-model="dates" range></v-date-picker>
           </v-col>
           <v-col cols="12" sm="6"> </v-col>
         </v-row>
       </template>
     </div>
+
+    <button @click="moveRoute">경로 입력하기</button>
   </div>
 </template>
 
 <script>
+import { mapActions } from "vuex";
 export default {
   name: "PlanInput",
   components: {},
@@ -55,6 +54,11 @@ export default {
   },
   created() {},
   methods: {
+    ...mapActions(["setTravelDate"]),
+    moveRoute() {
+      this.setTravelDate(this.dates);
+      this.$router.push({ name: "routeWriter" });
+    },
     checkTravelTitle() {
       if (!this.travelTitle || this.travelTitle.length > 30) {
         this.travelTitleErr = true;

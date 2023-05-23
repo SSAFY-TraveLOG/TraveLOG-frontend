@@ -1,11 +1,14 @@
 export default {
-    ["UserNo"](state, userNo) {
-        state.userNo = userNo;
-    },
-    ["UserId"](state, userId) {
-        state.userId = userId;
-    },
-    ["UserName"](state, userName) {
-        state.userName = userName;
-    },
+  ["UserNo"](state, userNo) {
+    state.userNo = userNo;
+  },
+  ["UserId"](state, userId) {
+    state.userId = userId;
+  },
+  ["UserName"](state, userName) {
+    state.userName = userName;
+  },
+  ["TravelDate"](state, travelDate) {
+    state.travelDate = travelDate;
+  },
 };
