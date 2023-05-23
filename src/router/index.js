@@ -8,6 +8,7 @@ import LoginPage from "@/views/Login";
 import JoinPage from "@/views/Join";
 import BoardPage from "@/views/Board";
 import QnaBoardPage from "@/views/QnaBoard";
+import PlanPage from "@/views/Plan";
 
 Vue.use(VueRouter);
 
@@ -106,6 +107,44 @@ const routes = [
         component: () => import("@/components/qnaboard/QnaBoardDelete.vue"),
         meta: { requiresAuth: true },
       },
+    ],
+  },
+  {
+    path: "/plan",
+    name: "plan",
+    component: PlanPage,
+    redirect: "/plan/",
+    children: [
+      {
+        path: "",
+        name: "planList",
+        component: () => import("@/components/plan/PlanList.vue"),
+        meta: { requiresAuth: true },
+      },
+      // {
+      //   path: "write",
+      //   name: "planWriter",
+      //   component: () => import("@/components/plan/PlanWriter.vue"),
+      //   meta: { requiresAuth: true },
+      // },
+      // {
+      //   path: "view/:planNo",
+      //   name: "planDetail",
+      //   component: () => import("@/components/plan/PlanDetail.vue"),
+      //   meta: { requiresAuth: true },
+      // },
+      // {
+      //   path: "modify/:planNo",
+      //   name: "planModify",
+      //   component: () => import("@/components/plan/PlanModify.vue"),
+      //   meta: { requiresAuth: true },
+      // },
+      // {
+      //   path: "delete/:planNo",
+      //   name: "planDelete",
+      //   component: () => import("@/components/plan/PlanDelete.vue"),
+      //   meta: { requiresAuth: true },
+      // },
     ],
   },
   {
