@@ -1,7 +1,7 @@
 <template>
-  <div>
-    <plan-input />
-  </div>
+  <v-sheet class="d-flex flex-column">
+    <plan-input id="planInput" class="align-self-center" />
+  </v-sheet>
 </template>
 
 <script>
@@ -19,4 +19,8 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+#planInput {
+  width: 50%;
+}
+</style>
