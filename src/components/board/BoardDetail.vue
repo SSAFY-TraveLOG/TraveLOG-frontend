@@ -31,6 +31,8 @@
           삭제
         </v-btn>
       </v-container>
+      <v-divider></v-divider>
+      <board-comment-writer></board-comment-writer>
     </v-container>
   </v-sheet>
 </template>
@@ -38,6 +40,7 @@
 <script>
 import axios from "@/util/axios";
 import { mapGetters } from "vuex";
+import BoardCommentWriter from "./item/BoardCommentWriter.vue";
 
 export default {
   name: "BoardDetail",
@@ -45,6 +48,9 @@ export default {
     return {
       article: {},
     };
+  },
+  components: {
+    BoardCommentWriter,
   },
   computed: {
     message() {
