@@ -1,14 +1,15 @@
 <template>
   <div>
-    <router-view />
+    <router-view></router-view>
   </div>
 </template>
 
 <script>
-
 export default {
-  name: "AttractionPage",
-};
+  name: "PlanPage",
+}
 </script>
 
-<style scoped></style>
+<style>
+
+</style>

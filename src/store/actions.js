@@ -12,6 +12,26 @@ let setUserName = ({ commit }, data) => {
   commit("UserName", data);
 };
 
+let setTravelTitle = (store, data) => {
+  store.commit("TravelTitle", data);
+};
+
+let setTravelDescription = (store, data) => {
+  store.commit("TravelDescription", data);
+};
+
+let setTravelAuthority = (store, data) => {
+  store.commit("TravelAuthority", data);
+};
+
+let setTravelDate = (store, data) => {
+  store.commit("TravelDate", data);
+};
+
+let setTravelParticipants = (store, data) => {
+  store.commit("TravelParticipants", data);
+};
+
 // 백엔드에서 반환한 결과값을 가지고 로그인 성공 실패 여부를 vuex에 넣어준다.
 const processLogin = (store, data) => {
   console.log("processLogin");
@@ -53,5 +73,9 @@ const logoutApi = async (store) => {
 export default {
   loginApi,
   logoutApi,
-  processLogin,
+  setTravelTitle,
+  setTravelDescription,
+  setTravelAuthority,
+  setTravelDate,
+  setTravelParticipants,
 };
