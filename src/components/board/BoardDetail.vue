@@ -31,6 +31,15 @@
           삭제
         </v-btn>
       </v-container>
+      <v-divider></v-divider>
+      <board-comment-writer
+        :articleNo="article.articleNo" @change="change"
+      ></board-comment-writer>
+      <div v-if="comments.length">
+        <div class="outer" v-for="comment in comments" :key="comment.replyId">
+          <board-comment-item :comment="comment" />
+        </div>
+      </div>
     </v-container>
   </v-sheet>
 </template>
@@ -38,13 +47,29 @@
 <script>
 import axios from "@/util/axios";
 import { mapGetters } from "vuex";
+import BoardCommentWriter from "./item/BoardCommentWriter.vue";
+import BoardCommentItem from "./item/BoardCommentItem.vue";
 
 export default {
   name: "BoardDetail",
   data() {
     return {
       article: {},
+      comments: [
+        {
+          replyId: Number,
+          userNo: Number,
+          userName: String,
+          articleNo: Number,
+          content: String,
+          registerTime: String,
+        },
+      ],
     };
+  },
+  components: {
+    BoardCommentWriter,
+    BoardCommentItem,
   },
   computed: {
     message() {
@@ -59,6 +84,12 @@ export default {
       .post(`/board/view/${this.$route.params.articleNo}`)
       .then(({ data }) => {
         this.article = data.data;
+      });
+
+    axios
+      .get(`board/cmt-list/${this.$route.params.articleNo}`)
+      .then(({ data }) => {
+        this.comments = data.data;
       });
   },
   methods: {
@@ -79,6 +110,10 @@ export default {
         });
       }
     },
+    change(value) {
+      this.comments = value;
+      console.log(this.comments);
+    }
   },
 };
 </script>

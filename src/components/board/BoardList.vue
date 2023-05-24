@@ -39,13 +39,42 @@
     </v-sheet>
     <div class="d-flex flex-column" v-if="articles.length">
       <v-data-table
-        class="align-self-center"
+        class="align-self-center elevation-1"
         style="width: 100%"
         :headers="headers"
         :items="articles"
         :items-per-page="10"
-        @click:row="openDetail"
-      ></v-data-table>
+        hide-default-footer
+        :page.sync="page"
+        @page-count="pageCount = $event"
+      >
+        <template #[`item`]="{ item }">
+          <tr>
+            <td>
+              <v-icon @click="likeArticle(item)" color="pink">{{
+                item.like ? "mdi-heart" : "mdi-heart-outline"
+              }}</v-icon>
+            </td>
+            <td class="text-center" @click="openDetail(item.articleNo)">
+              {{ item.displayNo }}
+            </td>
+            <td @click="openDetail(item.articleNo)">{{ item.subject }}</td>
+            <td class="text-center" @click="openDetail(item.articleNo)">
+              {{ item.userName }}
+            </td>
+            <td class="text-center" @click="openDetail(item.articleNo)">
+              {{ item.registerTime }}
+            </td>
+            <td class="text-center" @click="openDetail(item.articleNo)">
+              {{ item.readCount }}
+            </td>
+          </tr>
+        </template>
+      </v-data-table>
+      <div class="text-center pt-2">
+        <v-pagination v-model="page" :total-visible="7" :length="pageCount">
+        </v-pagination>
+      </div>
     </div>
     <div v-else>
       <div class="d-flex flex-column">
@@ -55,7 +84,8 @@
           :items="emptyArticle"
           :items-per-page="10"
           :search="search"
-        ></v-data-table>
+        >
+        </v-data-table>
       </div>
     </div>
     <v-btn
@@ -69,19 +99,30 @@
 </template>
 <script>
 import axios from "@/util/axios";
+import { mapGetters } from "vuex";
 
 export default {
   name: "BoardList",
   components: {},
   data: () => ({
+    page: 1,
+    pageCount: 0,
+    itemsPerPage: 10,
     searchKey: "",
     search: "",
     headers: [
       {
+        text: "",
+        align: "center",
+        sortable: false,
+        value: "image",
+        width: "2%",
+      },
+      {
         text: "번호",
         value: "displayNo",
         sortable: false,
-        width: "10%",
+        width: "8%",
         align: "center",
       },
       {
@@ -89,7 +130,7 @@ export default {
         value: "subject",
         sortable: false,
         width: "55%",
-        align: "start",
+        align: "center",
       },
       {
         text: "작성자",
@@ -113,7 +154,17 @@ export default {
         align: "center",
       },
     ],
-    articles: [],
+    articles: [
+      {
+        articleNo: Number,
+        displayNo: Number,
+        subject: String,
+        userName: String,
+        registerTime: String,
+        readCount: Number,
+        like: Boolean,
+      },
+    ],
     emptyArticle: [
       {
         articleNo: "",
@@ -122,6 +173,7 @@ export default {
         userName: "",
         registerTime: "",
         readCount: "",
+        like: "",
       },
     ],
     searchCondition: [
@@ -185,7 +237,18 @@ export default {
           element.modifiedTime = year + "-" + month + "-" + date;
         });
       }
-      this.articles = data.data;
+      let articles = data.data;
+
+      axios.get(`/like/user/article/${this.userNo}`).then(({ data }) => {
+        let likeArr = data.data;
+        articles.forEach((article) => {
+          if (likeArr.includes(article.articleNo.toString())) {
+            article.like = true;
+          } else article.like = false;
+        });
+
+        this.articles = articles;
+      });
     });
   },
   methods: {
@@ -195,12 +258,70 @@ export default {
         return;
       }
 
+      if (this.search == null) {
+        axios({
+          url: `/board/search`,
+          method: "get",
+        }).then(({ data }) => {
+          let idx = 1;
+          if (data.data != null) {
+            data.data.forEach((element) => {
+              element.displayNo = idx++;
+              if (element.registerTime == "") return "";
+
+              let jsDate = new Date(element.registerTime);
+
+              let year = jsDate.getFullYear();
+              let month = jsDate.getMonth() + 1;
+              let date = jsDate.getDate();
+
+              if (month < 10) {
+                month = "0" + month;
+              }
+              if (date < 10) {
+                date = "0" + date;
+              }
+
+              element.registerTime = year + "-" + month + "-" + date;
+            });
+
+            data.data.forEach((element) => {
+              if (element.modifiedTime == "") return "";
+
+              let jsDate = new Date(element.modifiedTime);
+
+              let year = jsDate.getFullYear();
+              let month = jsDate.getMonth() + 1;
+              let date = jsDate.getDate();
+
+              if (month < 10) {
+                month = "0" + month;
+              }
+              if (date < 10) {
+                date = "0" + date;
+              }
+
+              element.modifiedTime = year + "-" + month + "-" + date;
+            });
+            let articles = data.data;
+
+            axios.get(`/like/user/article/${this.userNo}`).then(({ data }) => {
+              let likeArr = data.data;
+              articles.forEach((article) => {
+                if (likeArr.includes(article.articleNo.toString())) {
+                  article.like = true;
+                } else article.like = false;
+              });
+
+              this.articles = articles;
+            });
+          }
+        });
+      }
+
       axios({
-        url: `/qna/search?key=${this.searchKey}&value=${this.search}`,
-        method: "post",
-        data: JSON.stringify({
-          userNo: this.userNo,
-        }),
+        url: `/board/search?key=${this.searchKey}&value=${this.search}`,
+        method: "get",
       }).then(({ data }) => {
         let idx = 1;
         if (data.data != null) {
@@ -242,8 +363,20 @@ export default {
 
             element.modifiedTime = year + "-" + month + "-" + date;
           });
+
+          let articles = data.data;
+
+          axios.get(`/like/user/article/${this.userNo}`).then(({ data }) => {
+            let likeArr = data.data;
+            articles.forEach((article) => {
+              if (likeArr.includes(article.articleNo.toString())) {
+                article.like = true;
+              } else article.like = false;
+            });
+
+            this.articles = articles;
+          });
         }
-        this.articles = data.data;
       });
     },
     moveWrite() {
@@ -252,9 +385,36 @@ export default {
     openDetail(val) {
       this.$router.push({
         name: "boardDetail",
-        params: { articleNo: val.articleNo },
+        params: { articleNo: val },
       });
     },
+    likeArticle(val) {
+      if (val.like == 0) {
+        axios
+          .post("/like/article", {
+            userNo: this.userNo,
+            articleNo: val.articleNo,
+          })
+          .then((data) => {
+            if (data.data.data[0] == 1) {
+              this.articles[val.displayNo - 1].like = true;
+            }
+          });
+      } else {
+        axios
+          .post("/like/article/delete", {
+            userNo: this.userNo,
+            articleNo: val.articleNo,
+          })
+          .then((data) => {
+            if (data.data.data[0] == 1)
+              this.articles[val.displayNo - 1].like = false;
+          });
+      }
+    },
+  },
+  computed: {
+    ...mapGetters({ userNo: "getUserNo" }),
   },
 };
 </script>
