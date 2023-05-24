@@ -43,6 +43,7 @@
         style="width: 100%"
         :headers="headers"
         :items="articles"
+        item-key="displayNo"
         :items-per-page="10"
         hide-default-footer
         :page.sync="page"
@@ -67,6 +68,9 @@
             </td>
             <td class="text-center" @click="openDetail(item.articleNo)">
               {{ item.readCount }}
+            </td>
+            <td class="text-center" @click="openDetail(item.articleNo)">
+              {{ item.likeCount }}
             </td>
           </tr>
         </template>
@@ -129,7 +133,7 @@ export default {
         text: "제목",
         value: "subject",
         sortable: false,
-        width: "55%",
+        width: "45%",
         align: "center",
       },
       {
@@ -153,6 +157,13 @@ export default {
         width: "10%",
         align: "center",
       },
+      {
+        text: "좋아요",
+        value: "likeCount",
+        sortable: false,
+        width: "10%",
+        align: "center",
+      },
     ],
     articles: [
       {
@@ -163,6 +174,7 @@ export default {
         registerTime: String,
         readCount: Number,
         like: Boolean,
+        likeCount: Number,
       },
     ],
     emptyArticle: [
@@ -174,6 +186,7 @@ export default {
         registerTime: "",
         readCount: "",
         like: "",
+        likeCount: "",
       },
     ],
     searchCondition: [
@@ -239,16 +252,25 @@ export default {
       }
       let articles = data.data;
 
-      axios.get(`/like/user/article/${this.userNo}`).then(({ data }) => {
-        let likeArr = data.data;
-        articles.forEach((article) => {
-          if (likeArr.includes(article.articleNo.toString())) {
-            article.like = true;
-          } else article.like = false;
-        });
+      axios
+        .get(`/like/user/article/${this.userNo}`)
+        .then(({ data }) => {
+          let likeArr = data.data;
+          articles.forEach((article) => {
+            if (likeArr.includes(article.articleNo.toString())) {
+              article.like = true;
+            } else article.like = false;
 
-        this.articles = articles;
-      });
+            axios.get(`/like/article/${article.articleNo}`).then(({ data }) => {
+              article.likeCount = data.data;
+            });
+          });
+        })
+        .then(() => {
+          this.articles = articles;
+          console.log(this.articles);
+        });
+      // this.articles = articles;
     });
   },
   methods: {
