@@ -73,6 +73,7 @@ const logoutApi = async (store) => {
 export default {
   loginApi,
   logoutApi,
+  processLogin,
   setTravelTitle,
   setTravelDescription,
   setTravelAuthority,
