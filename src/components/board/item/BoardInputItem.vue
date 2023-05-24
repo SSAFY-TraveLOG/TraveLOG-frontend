@@ -31,14 +31,6 @@
         <v-container class="d-flex flex-row justify-space-between align-center">
           <v-btn type="reset" class="mr-6"> 목록 </v-btn>
           <v-container class="d-flex flex-row justify-end align-center">
-            <v-checkbox
-              v-model="secret"
-              :value="article.secret"
-              class="mr-6"
-              hide-details="true"
-              label="비밀글"
-              dense
-            ></v-checkbox>
             <v-btn type="submit" v-if="this.type == 'write'"> 등록 </v-btn>
             <v-btn type="submit" v-else> 수정 </v-btn>
           </v-container>
