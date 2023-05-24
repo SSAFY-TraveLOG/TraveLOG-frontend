@@ -268,9 +268,7 @@ export default {
         })
         .then(() => {
           this.articles = articles;
-          console.log(this.articles);
         });
-      // this.articles = articles;
     });
   },
   methods: {
@@ -327,16 +325,25 @@ export default {
             });
             let articles = data.data;
 
-            axios.get(`/like/user/article/${this.userNo}`).then(({ data }) => {
-              let likeArr = data.data;
-              articles.forEach((article) => {
-                if (likeArr.includes(article.articleNo.toString())) {
-                  article.like = true;
-                } else article.like = false;
-              });
+            axios
+              .get(`/like/user/article/${this.userNo}`)
+              .then(({ data }) => {
+                let likeArr = data.data;
+                articles.forEach((article) => {
+                  if (likeArr.includes(article.articleNo.toString())) {
+                    article.like = true;
+                  } else article.like = false;
 
-              this.articles = articles;
-            });
+                  axios
+                    .get(`/like/article/${article.articleNo}`)
+                    .then(({ data }) => {
+                      article.likeCount = data.data;
+                    });
+                });
+              })
+              .then(() => {
+                this.articles = articles;
+              });
           }
         });
       }
@@ -388,16 +395,25 @@ export default {
 
           let articles = data.data;
 
-          axios.get(`/like/user/article/${this.userNo}`).then(({ data }) => {
-            let likeArr = data.data;
-            articles.forEach((article) => {
-              if (likeArr.includes(article.articleNo.toString())) {
-                article.like = true;
-              } else article.like = false;
-            });
+          axios
+            .get(`/like/user/article/${this.userNo}`)
+            .then(({ data }) => {
+              let likeArr = data.data;
+              articles.forEach((article) => {
+                if (likeArr.includes(article.articleNo.toString())) {
+                  article.like = true;
+                } else article.like = false;
 
-            this.articles = articles;
-          });
+                axios
+                  .get(`/like/article/${article.articleNo}`)
+                  .then(({ data }) => {
+                    article.likeCount = data.data;
+                  });
+              });
+            })
+            .then(() => {
+              this.articles = articles;
+            });
         }
       });
     },
@@ -420,6 +436,7 @@ export default {
           .then((data) => {
             if (data.data.data[0] == 1) {
               this.articles[val.displayNo - 1].like = true;
+              this.articles[val.displayNo - 1].likeCount += 1;
             }
           });
       } else {
@@ -431,6 +448,7 @@ export default {
           .then((data) => {
             if (data.data.data[0] == 1)
               this.articles[val.displayNo - 1].like = false;
+              this.articles[val.displayNo - 1].likeCount -= 1;
           });
       }
     },
