@@ -36,7 +36,7 @@ export default {
         level: 5,
       };
       this.map = new window.kakao.maps.Map(container, options);
-      if (attractions.length)
+      if (attractions?.length)
         this.loadMarker(attractions.slice(0, Math.min(attractions.length, 10)));
     },
     loadMarker(attractions) {
