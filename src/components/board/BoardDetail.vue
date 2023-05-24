@@ -33,11 +33,19 @@
       </v-container>
       <v-divider></v-divider>
       <board-comment-writer
-        :articleNo="article.articleNo" @change="change"
+        :articleNo="article.articleNo"
+        @change="change"
       ></board-comment-writer>
       <div v-if="comments.length">
-        <div class="outer" v-for="comment in comments" :key="comment.replyId.toString()">
-          <board-comment-item :comment="comment" />
+        <div
+          class="outer"
+          v-for="comment in comments"
+          :key="comment.replyId.toString()"
+        >
+          <board-comment-item
+            @change-comment="changeComment"
+            :comment="comment"
+          />
         </div>
       </div>
     </v-container>
@@ -113,7 +121,10 @@ export default {
     change(value) {
       this.comments = value;
       console.log(this.comments);
-    }
+    },
+    changeComment(value) {
+      this.comments = value;
+    },
   },
 };
 </script>
