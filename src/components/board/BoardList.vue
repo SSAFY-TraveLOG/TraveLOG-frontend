@@ -457,9 +457,10 @@ export default {
             articleNo: val.articleNo,
           })
           .then((data) => {
-            if (data.data.data[0] == 1)
+            if (data.data.data[0] == 1) {
               this.articles[val.displayNo - 1].like = false;
-            this.articles[val.displayNo - 1].likeCount -= 1;
+              this.articles[val.displayNo - 1].likeCount -= 1;
+            }
           });
       }
     },
