@@ -31,6 +31,20 @@
           삭제
         </v-btn>
       </v-container>
+      <v-divider></v-divider>
+      <qna-board-comment-writer
+        :articleNo="article.articleNo"
+        @change="change"
+      ></qna-board-comment-writer>
+      <div v-if="comments.length">
+        <div
+          class="outer"
+          v-for="comment in comments"
+          :key="comment.replyId.toString()"
+        >
+          <qna-board-comment-item :comment="comment" />
+        </div>
+      </div>
     </v-container>
   </v-sheet>
 </template>
@@ -38,13 +52,29 @@
 <script>
 import axios from "@/util/axios";
 import { mapGetters } from "vuex";
+import QnaBoardCommentWriter from "./item/QnaBoardCommentWriter.vue";
+import QnaBoardCommentItem from "./item/QnaBoardCommentItem.vue";
 
 export default {
   name: "QnaBoardDetail",
   data() {
     return {
       article: {},
+      comments: [
+        {
+          replyId: Number,
+          userNo: Number,
+          userName: String,
+          articleNo: Number,
+          content: String,
+          registerTime: String,
+        },
+      ],
     };
+  },
+  components: {
+    QnaBoardCommentItem,
+    QnaBoardCommentWriter,
   },
   computed: {
     message() {
@@ -55,12 +85,19 @@ export default {
     ...mapGetters({ userNo: "getUserNo" }),
   },
   created() {
-    console.log(this.$route.params.articleNo);
     axios
-      .post(`/qna/view/${this.$route.params.articleNo}`, { userNo: this.userNo })
+      .post(`/qna/view/${this.$route.params.articleNo}`, {
+        userNo: this.userNo,
+      })
       .then(({ data }) => {
         console.log(data);
         this.article = data.data;
+      });
+
+    axios
+      .get(`qna/cmt-list/${this.$route.params.articleNo}`)
+      .then(({ data }) => {
+        this.comments = data.data;
       });
   },
   methods: {
@@ -80,6 +117,9 @@ export default {
           params: { articleNo: this.article.articleNo },
         });
       }
+    },
+    change(value) {
+      this.comments = value;
     },
   },
 };
