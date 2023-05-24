@@ -42,7 +42,7 @@
           v-for="comment in comments"
           :key="comment.replyId.toString()"
         >
-          <qna-board-comment-item :comment="comment" />
+          <qna-board-comment-item @change-comment="changeComment" :comment="comment"/>
         </div>
       </div>
     </v-container>
@@ -120,6 +120,9 @@ export default {
     change(value) {
       this.comments = value;
     },
+    changeComment(value) {
+      this.comments = value;
+    }
   },
 };
 </script>
