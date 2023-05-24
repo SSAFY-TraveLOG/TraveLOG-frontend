@@ -32,7 +32,7 @@
     </v-radio-group>
     <v-divider></v-divider>
     <v-sheet class="d-flex flex-column ma-10">
-      <v-containe class="fill-height">
+      <v-container class="fill-height">
         <v-row>
           <v-col>
             <v-card>
@@ -42,7 +42,7 @@
                   <v-date-picker
                     class="align-self-center"
                     v-model="dates"
-                    no-title="true"
+                    no-title
                     range
                   ></v-date-picker>
                 </v-col>
@@ -67,12 +67,12 @@
                 item-key="userId"
                 :search="search"
                 show-select
-                hide-default-footer="false"
+                hide-default-footer
               ></v-data-table>
             </v-card>
           </v-col>
         </v-row>
-      </v-containe>
+      </v-container>
     </v-sheet>
     <button @click="moveRoute">다음단계</button>
   </div>
