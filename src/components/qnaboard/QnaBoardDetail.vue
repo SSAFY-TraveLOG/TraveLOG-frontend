@@ -90,7 +90,6 @@ export default {
         userNo: this.userNo,
       })
       .then(({ data }) => {
-        console.log(data);
         this.article = data.data;
       });
 
