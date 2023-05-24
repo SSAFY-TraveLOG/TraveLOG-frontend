@@ -11,8 +11,8 @@ export default {
   ["TravelTitle"](state, travelTitle) {
     state.travelTitle = travelTitle;
   },
-  ["TravelDesciption"](state, travelDesciption) {
-    state.travelDesciption = travelDesciption;
+  ["TravelDescription"](state, travelDescription) {
+    state.travelDescription = travelDescription;
   },
   ["TravelAuthority"](state, travelAuthority) {
     state.travelAuthority = travelAuthority;

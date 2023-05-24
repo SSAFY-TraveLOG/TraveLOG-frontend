@@ -3,7 +3,7 @@ export default {
   getUserId: (state) => state.userId,
   getUserName: (state) => state.userName,
   getTravelTitle: (state) => state.travelTitle,
-  getTravelDesciption: (state) => state.travelDesciption,
+  getTravelDescription: (state) => state.travelDescription,
   getTravelAuthority: (state) => state.travelAuthority,
   getTravelDate: (state) => state.travelDate,
   getTravelParticipants: (state) => state.travelParticipants,

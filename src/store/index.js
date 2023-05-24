@@ -12,7 +12,7 @@ const state = {
   userName: "",
   userNo: "",
   travelTitle: "",
-  travelDesciption: "",
+  travelDescription: "",
   travelAuthority: 0,
   travelDate: [],
   travelParticipants: [],

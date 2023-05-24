@@ -131,7 +131,7 @@ export default {
       this.setTravelDescription(this.description);
       this.setTravelAuthority(this.authority);
       this.setTravelDate(this.dates.sort());
-      this.setTravelParticipants(this.selectedUsers);
+      this.setTravelParticipants(this.selectedUsers.filter(user => user.userNo != this.userNo));
       this.$router.push({ name: "routeWriter" });
     },
   },
