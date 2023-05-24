@@ -260,11 +260,16 @@ export default {
             if (likeArr.includes(article.articleNo.toString())) {
               article.like = true;
             } else article.like = false;
-
-            axios.get(`/like/article/${article.articleNo}`).then(({ data }) => {
-              article.likeCount = data.data;
-            });
           });
+          return Promise.all(
+            articles.map((article) =>
+              axios
+                .get(`/like/article/${article.articleNo}`)
+                .then(({ data }) => {
+                  article.likeCount = data.data;
+                })
+            )
+          );
         })
         .then(() => {
           this.articles = articles;
@@ -333,13 +338,16 @@ export default {
                   if (likeArr.includes(article.articleNo.toString())) {
                     article.like = true;
                   } else article.like = false;
-
-                  axios
-                    .get(`/like/article/${article.articleNo}`)
-                    .then(({ data }) => {
-                      article.likeCount = data.data;
-                    });
                 });
+                return Promise.all(
+                  articles.map((article) =>
+                    axios
+                      .get(`/like/article/${article.articleNo}`)
+                      .then(({ data }) => {
+                        article.likeCount = data.data;
+                      })
+                  )
+                );
               })
               .then(() => {
                 this.articles = articles;
@@ -403,13 +411,16 @@ export default {
                 if (likeArr.includes(article.articleNo.toString())) {
                   article.like = true;
                 } else article.like = false;
-
-                axios
-                  .get(`/like/article/${article.articleNo}`)
-                  .then(({ data }) => {
-                    article.likeCount = data.data;
-                  });
               });
+              return Promise.all(
+                articles.map((article) =>
+                  axios
+                    .get(`/like/article/${article.articleNo}`)
+                    .then(({ data }) => {
+                      article.likeCount = data.data;
+                    })
+                )
+              );
             })
             .then(() => {
               this.articles = articles;
@@ -448,7 +459,7 @@ export default {
           .then((data) => {
             if (data.data.data[0] == 1)
               this.articles[val.displayNo - 1].like = false;
-              this.articles[val.displayNo - 1].likeCount -= 1;
+            this.articles[val.displayNo - 1].likeCount -= 1;
           });
       }
     },
