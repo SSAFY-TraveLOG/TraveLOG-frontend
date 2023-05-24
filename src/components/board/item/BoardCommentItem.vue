@@ -1,7 +1,7 @@
 <template>
   <v-container class="">
     <v-card class="pa-2" color="#eeeeee" elevation="2">
-      <h6>{{ comment.userName }} {{ comment.registerTime }}</h6>
+      <h6>{{ comment.userName }} | {{ comment.registerTime }}</h6>
       <span>
         {{ comment.content }}
       </span>

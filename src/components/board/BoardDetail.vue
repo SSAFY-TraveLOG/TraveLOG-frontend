@@ -36,7 +36,7 @@
         :articleNo="article.articleNo" @change="change"
       ></board-comment-writer>
       <div v-if="comments.length">
-        <div class="outer" v-for="comment in comments" :key="comment.replyId">
+        <div class="outer" v-for="comment in comments" :key="comment.replyId.toString()">
           <board-comment-item :comment="comment" />
         </div>
       </div>
