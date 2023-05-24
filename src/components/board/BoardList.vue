@@ -51,15 +51,9 @@
         <template #[`item`]="{ item }">
           <tr>
             <td>
-              <v-icon
-                @click="hateArticle(item.articleNo)"
-                color="pink"
-                v-if="item.like"
-                >mdi-heart</v-icon
-              >
-              <v-icon @click="likeArticle(item.articleNo)" v-else
-                >mdi-heart-outline</v-icon
-              >
+              <v-icon @click="likeArticle(item)" color="pink">{{
+                item.like ? "mdi-heart" : "mdi-heart-outline"
+              }}</v-icon>
             </td>
             <td class="text-center" @click="openDetail(item.articleNo)">
               {{ item.displayNo }}
@@ -160,7 +154,17 @@ export default {
         align: "center",
       },
     ],
-    articles: [],
+    articles: [
+      {
+        articleNo: Number,
+        displayNo: Number,
+        subject: String,
+        userName: String,
+        registerTime: String,
+        readCount: Number,
+        like: Boolean,
+      },
+    ],
     emptyArticle: [
       {
         articleNo: "",
@@ -169,6 +173,7 @@ export default {
         userName: "",
         registerTime: "",
         readCount: "",
+        like: "",
       },
     ],
     searchCondition: [
@@ -238,8 +243,8 @@ export default {
         let likeArr = data.data;
         articles.forEach((article) => {
           if (likeArr.includes(article.articleNo.toString())) {
-            article.like = 1;
-          } else article.like = 0;
+            article.like = true;
+          } else article.like = false;
         });
 
         this.articles = articles;
@@ -253,12 +258,70 @@ export default {
         return;
       }
 
+      if (this.search == null) {
+        axios({
+          url: `/board/search`,
+          method: "get",
+        }).then(({ data }) => {
+          let idx = 1;
+          if (data.data != null) {
+            data.data.forEach((element) => {
+              element.displayNo = idx++;
+              if (element.registerTime == "") return "";
+
+              let jsDate = new Date(element.registerTime);
+
+              let year = jsDate.getFullYear();
+              let month = jsDate.getMonth() + 1;
+              let date = jsDate.getDate();
+
+              if (month < 10) {
+                month = "0" + month;
+              }
+              if (date < 10) {
+                date = "0" + date;
+              }
+
+              element.registerTime = year + "-" + month + "-" + date;
+            });
+
+            data.data.forEach((element) => {
+              if (element.modifiedTime == "") return "";
+
+              let jsDate = new Date(element.modifiedTime);
+
+              let year = jsDate.getFullYear();
+              let month = jsDate.getMonth() + 1;
+              let date = jsDate.getDate();
+
+              if (month < 10) {
+                month = "0" + month;
+              }
+              if (date < 10) {
+                date = "0" + date;
+              }
+
+              element.modifiedTime = year + "-" + month + "-" + date;
+            });
+            let articles = data.data;
+
+            axios.get(`/like/user/article/${this.userNo}`).then(({ data }) => {
+              let likeArr = data.data;
+              articles.forEach((article) => {
+                if (likeArr.includes(article.articleNo.toString())) {
+                  article.like = true;
+                } else article.like = false;
+              });
+
+              this.articles = articles;
+            });
+          }
+        });
+      }
+
       axios({
-        url: `/qna/search?key=${this.searchKey}&value=${this.search}`,
-        method: "post",
-        data: JSON.stringify({
-          userNo: this.userNo,
-        }),
+        url: `/board/search?key=${this.searchKey}&value=${this.search}`,
+        method: "get",
       }).then(({ data }) => {
         let idx = 1;
         if (data.data != null) {
@@ -300,8 +363,20 @@ export default {
 
             element.modifiedTime = year + "-" + month + "-" + date;
           });
+
+          let articles = data.data;
+
+          axios.get(`/like/user/article/${this.userNo}`).then(({ data }) => {
+            let likeArr = data.data;
+            articles.forEach((article) => {
+              if (likeArr.includes(article.articleNo.toString())) {
+                article.like = true;
+              } else article.like = false;
+            });
+
+            this.articles = articles;
+          });
         }
-        this.articles = data.data;
       });
     },
     moveWrite() {
@@ -313,22 +388,29 @@ export default {
         params: { articleNo: val },
       });
     },
-    likeArticle(articleNo) {
-      axios
-        .post("/like/article", { userNo: this.userNo, articleNo: articleNo })
-        .then(() => {
-          location.reload();
-        });
-    },
-    hateArticle(articleNo) {
-      axios
-        .post("/like/article/delete", {
-          userNo: this.userNo,
-          articleNo: articleNo,
-        })
-        .then(() => {
-          location.reload();
-        });
+    likeArticle(val) {
+      if (val.like == 0) {
+        axios
+          .post("/like/article", {
+            userNo: this.userNo,
+            articleNo: val.articleNo,
+          })
+          .then((data) => {
+            if (data.data.data[0] == 1) {
+              this.articles[val.displayNo - 1].like = true;
+            }
+          });
+      } else {
+        axios
+          .post("/like/article/delete", {
+            userNo: this.userNo,
+            articleNo: val.articleNo,
+          })
+          .then((data) => {
+            if (data.data.data[0] == 1)
+              this.articles[val.displayNo - 1].like = false;
+          });
+      }
     },
   },
   computed: {
