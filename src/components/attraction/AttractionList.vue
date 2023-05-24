@@ -258,7 +258,7 @@ export default {
         });
       }
       this.attractions = data.data;
-      this.$refs.kakaoMapRef.loadMap(this.attractions);
+      this.$refs.kakaoMapRef.loadMarker(this.attractions.slice(this.page*10-10, Math.min(this.attractions.length, this.page*10)));
     });
   },
   methods: {
