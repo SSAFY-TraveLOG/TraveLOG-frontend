@@ -12,6 +12,10 @@ let setUserName = ({ commit }, data) => {
   commit("UserName", data);
 };
 
+let setUserImage = ({ commit }, data) => {
+  commit("UserImage", data);
+};
+
 let setTravelTitle = (store, data) => {
   store.commit("TravelTitle", data);
 };
@@ -39,6 +43,7 @@ const processLogin = (store, data) => {
   setUserId(store, data.userId);
   setUserNo(store, data.userNo);
   setUserName(store, data.userName);
+  setUserImage(store, data.image);
   // localStorage.setItem('user',JSON.stringify(userData));
   axios.defaults.headers.common[
     "Authorization"

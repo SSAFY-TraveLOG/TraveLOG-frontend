@@ -11,6 +11,7 @@ const state = {
   userId: "",
   userName: "",
   userNo: "",
+  userImage: "",
   travelTitle: "",
   travelDesciption: "",
   travelAuthority: 0,
