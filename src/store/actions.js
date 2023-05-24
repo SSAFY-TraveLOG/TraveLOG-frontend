@@ -33,15 +33,18 @@ let setTravelParticipants = (store, data) => {
 };
 
 // 백엔드에서 반환한 결과값을 가지고 로그인 성공 실패 여부를 vuex에 넣어준다.
-let processResponse = (store, response) => {
-  setUserId(store, response.userId);
-  setUserNo(store, response.userNo);
-  setUserName(store, response.userName);
+const processLogin = (store, data) => {
+  console.log("processLogin");
+  console.log(data);
+  setUserId(store, data.userId);
+  setUserNo(store, data.userNo);
+  setUserName(store, data.userName);
+  // localStorage.setItem('user',JSON.stringify(userData));
   axios.defaults.headers.common[
     "Authorization"
-  ] = `Bearer ${response.token.accessToken}`;
-  localStorage.setItem("accessToken", response.token.accessToken);
-  localStorage.setItem("refreshToken", response.token.refreshToken);
+  ] = `Bearer ${data.token.accessToken}`;
+  localStorage.setItem("accessToken", data.token.accessToken);
+  localStorage.setItem("refreshToken", data.token.refreshToken);
 };
 
 const loginApi = async (store, { userId, password }) => {
@@ -51,7 +54,7 @@ const loginApi = async (store, { userId, password }) => {
       password: password,
     })
     .then((response) => {
-      processResponse(store, response.data.data);
+      processLogin(store, response.data.data);
     });
 
   return store.getters.getUserId; // 로그인 결과를 리턴한다
@@ -70,6 +73,7 @@ const logoutApi = async (store) => {
 export default {
   loginApi,
   logoutApi,
+  processLogin,
   setTravelTitle,
   setTravelDescription,
   setTravelAuthority,

@@ -42,6 +42,10 @@
                   >
                     회원가입
                   </v-btn>
+                  <div v-show="loginErr" class="input-error">
+                    아이디 또는 비밀번호를 잘못 입력했습니다. 입력하신 내용을
+                    다시 확인해주세요.
+                  </div>
                 </form>
               </div>
             </v-card>
@@ -53,7 +57,7 @@
 </template>
 
 <script>
-// import axios from "@/util/axios";
+import axios from "@/util/axios";
 import { mapActions } from "vuex";
 export default {
   name: "LoginView",
@@ -62,18 +66,26 @@ export default {
     return {
       userId: "",
       password: "",
+      loginErr: false,
     };
   },
   created() {},
   methods: {
-    ...mapActions(["loginApi"]),
+    ...mapActions(["loginApi", "processLogin"]),
     login() {
-      this.loginApi({
-        userId: this.userId,
-        password: this.password,
-      }).then(() => {
-        this.$router.push("/");
-      });
+      axios
+        .post(`/auth/check`, {
+          userId: this.userId,
+          password: this.password,
+        })
+        .then((response) => {
+          this.processLogin(response.data.data).then(() => {
+            this.$router.push("/");
+          });
+        })
+        .catch(() => {
+          this.loginErr = true;
+        });
     },
     join() {
       this.$router.push("/user/join");
@@ -82,4 +94,9 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.input-error {
+  font-size: 11px;
+  color: red;
+}
+</style>
