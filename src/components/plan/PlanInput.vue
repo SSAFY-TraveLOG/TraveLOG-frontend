@@ -7,12 +7,7 @@
       v-model="title"
       :rules="titleRule"
     ></v-text-field>
-    <v-textarea
-      label="메모"
-      variant="outlined"
-      v-model="description"
-      height="100px"
-    ></v-textarea>
+    <v-textarea label="메모" variant="outlined" v-model="description" height="100px"></v-textarea>
     <v-divider class="mb-3"></v-divider>
     <h4>보기 권한</h4>
     <v-radio-group v-model="authority" mandatory>
@@ -36,47 +31,47 @@
         <v-row>
           <v-col>
             <v-card>
-                <v-col class="d-flex flex-column align-center">
-                  <h4>날짜 선택하기</h4>
-                  <v-date-picker
-                    class="align-self-center"
-                    v-model="dates"
-                    no-title
-                    range
-                  ></v-date-picker>
-                </v-col>
+              <v-col class="d-flex flex-column align-center">
+                <h4>날짜 선택하기</h4>
+                <v-date-picker
+                  class="align-self-center"
+                  v-model="dates"
+                  no-title
+                  range
+                ></v-date-picker>
+              </v-col>
             </v-card>
           </v-col>
           <v-col>
-              <v-card>
-                <v-card-title class="d-flex" width="100%">
-                  <v-text-field
-                    v-model="search"
-                    label="유저 검색하기"
-                    single-line
-                    hide-details
-                    dense
-                  ></v-text-field>
-                </v-card-title>
-                <v-data-table
-                  v-show="search != ''"
-                  v-model="selectedUsers"
-                  :headers="headers"
-                  :items="users"
-                  :single-select="false"
-                  item-key="userId"
-                  :search="search"
-                  show-select
-                  hide-default-footer
-                ></v-data-table>
-              </v-card>
+            <v-card>
+              <v-card-title class="d-flex" width="100%">
+                <v-text-field
+                  v-model="search"
+                  label="여행 친구 검색하기"
+                  single-line
+                  hide-details
+                  dense
+                ></v-text-field>
+              </v-card-title>
+              <v-data-table
+                v-show="search != ''"
+                v-model="selectedUsers"
+                :headers="headers"
+                :items="users"
+                :single-select="false"
+                item-key="userId"
+                :search="search"
+                show-select
+                hide-default-footer
+              ></v-data-table>
+            </v-card>
           </v-col>
           <v-col>
             <v-sheet>
               <v-select
                 v-model="sidoCode"
                 hide-details="true"
-                label="시도"
+                label="시 / 도"
                 :items="sidos"
                 item-text="sido"
                 item-value="code"
@@ -89,7 +84,7 @@
               <v-select
                 v-model="gugunCode"
                 hide-details="true"
-                label="구군"
+                label="구 / 군"
                 :items="guguns"
                 item-text="gugunName"
                 item-value="gugunCode"
@@ -131,8 +126,7 @@ export default {
       ],
       titleRule: [
         (v) => !!v.trim() || "여행 제목은 필수 입력사항입니다.",
-        (v) =>
-          !(v && v.length >= 30) || "여행 제목은 30자 이상 입력할 수 없습니다.",
+        (v) => !(v && v.length >= 30) || "여행 제목은 30자 이상 입력할 수 없습니다.",
       ],
       sidos: [
         {
@@ -229,17 +223,27 @@ export default {
       "setTravelGugunCode",
     ]),
     moveRoute() {
+      if (!this?.title) {
+        alert("여행 제목을 입력해주세요");
+        return;
+      }
       if (!this?.dates?.length) {
         alert("날짜를 선택해주세요");
+        return;
+      }
+      if (!this?.sidoCode) {
+        alert("시/도 를 선택해주세요");
+        return;
+      }
+      if (!this?.gugunCode) {
+        alert("구/군 을 선택해주세요");
         return;
       }
       this.setTravelTitle(this.title);
       this.setTravelDescription(this.description);
       this.setTravelAuthority(this.authority);
       this.setTravelDate(this.dates.sort());
-      this.setTravelParticipants(
-        this.selectedUsers.filter((user) => user.userNo != this.userNo)
-      );
+      this.setTravelParticipants(this.selectedUsers.filter((user) => user.userNo != this.userNo));
       this.setTravelSidoCode(this.sidoCode);
       this.setTravelGugunCode(this.gugunCode);
       this.$router.push({ name: "routeWriter" });
