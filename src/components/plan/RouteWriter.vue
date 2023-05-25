@@ -1,7 +1,7 @@
 <template>
-  <div>
+  <v-sheet class="d-flex align-center justify-center" width="100%">
     <route-input />
-  </div>
+  </v-sheet>
 </template>
 
 <script>

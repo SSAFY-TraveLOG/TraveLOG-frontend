@@ -1,5 +1,7 @@
 <template>
-  <qna-board-input-item type="modify" />
+  <v-sheet class="d-flex align-center justify-center" width="100%">
+    <qna-board-input-item type="modify" />
+  </v-sheet>
 </template>
 
 <script>
