@@ -1,15 +1,19 @@
 import axios from "@/util/axios";
 
-let setUserId = ({ commit }, data) => {
-  commit("UserId", data);
+let setUserId = (store, data) => {
+  store.commit("UserId", data);
 };
 
-let setUserNo = ({ commit }, data) => {
-  commit("UserNo", data);
+let setUserNo = (store, data) => {
+  store.commit("UserNo", data);
 };
 
-let setUserName = ({ commit }, data) => {
-  commit("UserName", data);
+let setUserName = (store, data) => {
+  store.commit("UserName", data);
+};
+
+let setUserImage = (store, data) => {
+  store.commit("UserImage", data);
 };
 
 let setTravelTitle = (store, data) => {
@@ -32,6 +36,14 @@ let setTravelParticipants = (store, data) => {
   store.commit("TravelParticipants", data);
 };
 
+let setTravelSidoCode = (store, data) => {
+  store.commit("TravelSidoCode", data);
+};
+
+let setTravelGugunCode = (store, data) => {
+  store.commit("TravelGugunCode", data);
+};
+
 // 백엔드에서 반환한 결과값을 가지고 로그인 성공 실패 여부를 vuex에 넣어준다.
 const processLogin = (store, data) => {
   console.log("processLogin");
@@ -39,6 +51,7 @@ const processLogin = (store, data) => {
   setUserId(store, data.userId);
   setUserNo(store, data.userNo);
   setUserName(store, data.userName);
+  setUserImage(store, data.image);
   // localStorage.setItem('user',JSON.stringify(userData));
   axios.defaults.headers.common[
     "Authorization"
@@ -79,4 +92,7 @@ export default {
   setTravelAuthority,
   setTravelDate,
   setTravelParticipants,
+  setUserName,
+  setTravelSidoCode,
+  setTravelGugunCode,
 };

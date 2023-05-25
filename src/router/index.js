@@ -9,6 +9,7 @@ import JoinPage from "@/views/Join";
 import BoardPage from "@/views/Board";
 import QnaBoardPage from "@/views/QnaBoard";
 import PlanPage from "@/views/Plan";
+import MyPage from "@/views/MyPage";
 
 Vue.use(VueRouter);
 
@@ -145,12 +146,12 @@ const routes = [
       //   component: () => import("@/components/plan/PlanModify.vue"),
       //   meta: { requiresAuth: true },
       // },
-      // {
-      //   path: "delete/:planNo",
-      //   name: "planDelete",
-      //   component: () => import("@/components/plan/PlanDelete.vue"),
-      //   meta: { requiresAuth: true },
-      // },
+      {
+        path: "delete/:planNo",
+        name: "planDelete",
+        component: () => import("@/components/plan/PlanDelete.vue"),
+        meta: { requiresAuth: true },
+      },
     ],
   },
   {
@@ -164,6 +165,12 @@ const routes = [
     name: "join",
     component: JoinPage,
     meta: { requiresAuth: false },
+  },
+  {
+    path: "/mypage",
+    name: "mypage",
+    component: MyPage,
+    meta: { requiresAuth: true },
   },
 ];
 

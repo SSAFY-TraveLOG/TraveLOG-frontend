@@ -4,6 +4,7 @@
     color="white"
     elevation="5"
     min-height="800px"
+    width="80%"
     rounded
   >
     <h1 class="align-self-center mb-5">Q&A 게시판</h1>
@@ -28,6 +29,7 @@
         hide-details="true"
         v-model="search"
         label="Search"
+        :loading="isLoading"
         clearable
         solo
         single-line
@@ -37,26 +39,22 @@
         >검색</v-btn
       >
     </v-sheet>
-    <div class="d-flex flex-column" v-if="articles.length">
-      <v-data-table
-        class="align-self-center"
-        style="width: 100%"
-        :headers="headers"
-        :items="articles"
-        :items-per-page="10"
-        @click:row="openDetail"
-      ></v-data-table>
-    </div>
-    <div v-else>
-      <div class="d-flex flex-column">
-        <v-data-table
-          style="width: 100%"
-          :headers="headers"
-          :items="emptyArticle"
-          :items-per-page="10"
-          :search="search"
-        ></v-data-table>
-      </div>
+    <v-data-table
+      class="align-self-center"
+      style="width: 100%"
+      :headers="headers"
+      :items="articles"
+      :loading="isLoading"
+      item-key="displayNo"
+      :items-per-page="10"
+      hide-default-footer
+      :page.sync="page"
+      @page-count="pageCount = $event"
+      @click:row="openDetail"
+    ></v-data-table>
+    <div class="text-center pt-2">
+      <v-pagination v-model="page" :total-visible="7" :length="pageCount">
+      </v-pagination>
     </div>
     <v-btn
       class="align-self-end"
@@ -76,6 +74,10 @@ export default {
   name: "QnaBoardList",
   components: {},
   data: () => ({
+    isLoading: true,
+    page: 1,
+    pageCount: 0,
+    itemsPerPage: 10,
     searchKey: "",
     search: "",
     headers: [
@@ -116,16 +118,6 @@ export default {
       },
     ],
     articles: [],
-    emptyArticle: [
-      {
-        articleNo: "",
-        displayNo: "",
-        subject: "등록된 글이 없습니다.",
-        userName: "",
-        registerTime: "",
-        readCount: "",
-      },
-    ],
     searchCondition: [
       {
         text: "제목",
@@ -191,10 +183,12 @@ export default {
         });
       }
       this.articles = data.data;
+      this.isLoading = false;
     });
   },
   methods: {
     pressSearch() {
+      this.isLoading = true;
       if (this.searchKey == "") {
         alert("검색 옵션을 선택해 주세요");
         return;
@@ -249,6 +243,7 @@ export default {
           });
         }
         this.articles = data.data;
+        this.isLoading = false;
       });
     },
     moveWrite() {

@@ -72,15 +72,14 @@
 
 <script>
 import axios from "@/util/axios";
-import { mapGetters } from 'vuex';
-
+import { mapGetters } from "vuex";
 export default {
-  name: "BoardCommentItem",
+  name: "QnaBoardCommentItem",
   data() {
-    return { 
-      mode: "read", 
-      newComment: "", 
-      sendComment: [] 
+    return {
+      mode: "read",
+      newComment: "",
+      sendComment: [],
     };
   },
   props: {
@@ -99,7 +98,7 @@ export default {
     },
     updateComment() {
       axios
-        .patch(`/board/cmt-update`, {
+        .patch(`/qna/cmt-update`, {
           replyId: this.comment.replyId,
           content: this.newComment,
         })
@@ -115,7 +114,7 @@ export default {
           }
 
           axios
-            .get(`/board/cmt-list/${this.$route.params.articleNo}`)
+            .get(`/qna/cmt-list/${this.$route.params.articleNo}`)
             .then(({ data }) => {
               this.sendComment = data.data;
               this.$emit("change-comment", this.sendComment);
@@ -125,7 +124,7 @@ export default {
     },
     deleteComment() {
       axios
-        .delete(`/board/cmt-delete/${this.comment.replyId}`)
+        .delete(`/qna/cmt-delete/${this.comment.replyId}`)
         .then(({ data }) => {
           let msg = "삭제 처리시 문제가 발생했습니다.";
           if (data.status === "OK") {
@@ -134,7 +133,7 @@ export default {
           alert(msg);
 
           axios
-            .get(`/board/cmt-list/${this.$route.params.articleNo}`)
+            .get(`/qna/cmt-list/${this.$route.params.articleNo}`)
             .then(({ data }) => {
               this.sendComment = data.data;
               this.$emit("change-comment", this.sendComment);

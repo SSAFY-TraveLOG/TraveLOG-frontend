@@ -5,9 +5,9 @@
       width="500"
     >
       <template v-slot:activator="{ on, attrs }">
-        <p v-bind="attrs" v-on="on">
+        <div v-bind="attrs" v-on="on">
           {{description.title}}
-        </p>
+        </div>
       </template>
 
       <v-card>

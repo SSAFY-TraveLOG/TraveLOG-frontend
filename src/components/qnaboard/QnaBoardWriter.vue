@@ -1,7 +1,7 @@
 <template>
-  <div>
+  <v-sheet class="d-flex align-center justify-center" width="100%">
     <qna-board-input-item type="write"></qna-board-input-item>
-  </div>
+  </v-sheet>
 </template>
 
 <script>
