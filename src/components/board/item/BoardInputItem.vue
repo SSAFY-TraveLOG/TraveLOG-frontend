@@ -31,14 +31,6 @@
         <v-container class="d-flex flex-row justify-space-between align-center">
           <v-btn type="reset" class="mr-6"> 목록 </v-btn>
           <v-container class="d-flex flex-row justify-end align-center">
-            <v-checkbox
-              v-model="secret"
-              :value="article.secret"
-              class="mr-6"
-              hide-details="true"
-              label="비밀글"
-              dense
-            ></v-checkbox>
             <v-btn type="submit" v-if="this.type == 'write'"> 등록 </v-btn>
             <v-btn type="submit" v-else> 수정 </v-btn>
           </v-container>
@@ -50,6 +42,7 @@
 
 <script>
 import axios from "@/util/axios";
+import { mapGetters } from "vuex";
 
 export default {
   name: "BoardInputItem",
@@ -58,7 +51,7 @@ export default {
       subject: [],
       content: [],
       article: {
-        userNo: 2,
+        userNo: this.userNo,
         articleNo: 0,
         subject: "",
         content: "",
@@ -70,9 +63,11 @@ export default {
   },
   created() {
     if (this.type === "modify") {
-      axios.post(`/board/view/${this.$route.params.articleNo}`).then(({ data }) => {
-        this.article = data.data;
-      });
+      axios
+        .post(`/board/view/${this.$route.params.articleNo}`)
+        .then(({ data }) => {
+          this.article = data.data;
+        });
     }
   },
   methods: {
@@ -93,8 +88,7 @@ export default {
         this.$refs.content.focus());
 
       if (!err) alert(msg);
-      else
-        this.type === "write" ? this.writeArticle() : this.modifyArticle();
+      else this.type === "write" ? this.writeArticle() : this.modifyArticle();
     },
     onReset(event) {
       event.preventDefault();
@@ -106,7 +100,7 @@ export default {
     writeArticle() {
       axios
         .post(`/board/write`, {
-          userNo: this.article.userNo,
+          userNo: this.userNo,
           subject: this.article.subject,
           content: this.article.content,
         })
@@ -140,9 +134,10 @@ export default {
       this.$router.push({ name: "boardList" });
     },
   },
+  computed: {
+    ...mapGetters({ userNo: "getUserNo" }),
+  },
 };
 </script>
 
-<style>
-
-</style>
+<style></style>

@@ -8,6 +8,9 @@ export default {
   ["UserName"](state, userName) {
     state.userName = userName;
   },
+  ["UserImage"](state, userImage) {
+    state.userImage = userImage;
+  },
   ["TravelTitle"](state, travelTitle) {
     state.travelTitle = travelTitle;
   },

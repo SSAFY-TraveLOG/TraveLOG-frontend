@@ -2,6 +2,7 @@ export default {
   getUserNo: (state) => state.userNo,
   getUserId: (state) => state.userId,
   getUserName: (state) => state.userName,
+  getUserImage: (state) => state.userImage,
   getTravelTitle: (state) => state.travelTitle,
   getTravelDescription: (state) => state.travelDescription,
   getTravelAuthority: (state) => state.travelAuthority,
