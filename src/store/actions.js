@@ -48,6 +48,10 @@ let setTravelRoutes = (store, data) => {
   store.commit("TravelRoutes", data);
 }
 
+let setPlanNo = (store, data) => {
+  store.commit("PlanNo", data);
+}
+
 // 백엔드에서 반환한 결과값을 가지고 로그인 성공 실패 여부를 vuex에 넣어준다.
 const processLogin = (store, data) => {
   console.log("processLogin");
@@ -100,4 +104,5 @@ export default {
   setTravelSidoCode,
   setTravelGugunCode,
   setTravelRoutes,
+  setPlanNo,
 };

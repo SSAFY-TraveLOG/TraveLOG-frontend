@@ -23,6 +23,8 @@
 </template>
 
 <script>
+import { mapActions } from "vuex";
+
 export default {
   name: "planCard",
   props: {
@@ -33,6 +35,9 @@ export default {
   },
   created() {},
   methods: {
+    ...mapActions([
+      "setPlanNo",
+    ]),
     planDetail() {
       this.$router.push({
         name: "planDetail",
@@ -46,8 +51,9 @@ export default {
       });
     },
     modifyPlan() {
+      this.setPlanNo(this.plan.planNo);
       this.$router.push({
-        name: "planDelete",
+        name: "planModify",
         params: { planNo: this.plan.planNo },
       });
     },

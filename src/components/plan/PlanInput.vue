@@ -225,9 +225,20 @@ export default {
         this.title = data.data.title;
         this.description = data.data.description;
         this.authority = data.data.authority;
-        this.dates = [data.data.startDate, data.data.endDate],
-        this.selectedUsers = data.data.participants
+        this.dates.push(data.data.startDate.substring(0, 10))
+        this.dates.push(data.data.endDate.substring(0, 10))
+        console.log(`participants`)
+        console.log(data.data.participants)
+        data.data.participants.forEach(element => {
+          this.selectedUsers.push({
+          userId: element.participantId,
+          userNo: element.participantNo,
+          userName: element.participantName},)
+        });
+        //this.selectedUsers = [...data.data.participants]
+        console.log(this.selectedUsers)
         this.sidoCode = data.data.sidoCode;
+        this.getGuguns();
         this.gugunCode = data.data.gugunCode;
         this.setTravelRoutes(data.data.routes);
       });
@@ -242,6 +253,7 @@ export default {
       "setTravelParticipants",
       "setTravelSidoCode",
       "setTravelGugunCode",
+      "setTravelRoutes",
     ]),
     moveRoute() {
       if (!this?.dates?.length) {
@@ -265,6 +277,11 @@ export default {
       });
     },
   },
+  watch: {
+    selectedUsers(newS) {
+      console.log(newS)
+    }
+  }
 };
 </script>
 
