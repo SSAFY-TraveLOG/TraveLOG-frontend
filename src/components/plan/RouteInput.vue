@@ -113,7 +113,8 @@
                 <h1>여행 경로 리스트</h1>
               </v-col>
               <v-col class="d-flex align-center" cols="2">
-                <v-btn @click="writePlan">저장</v-btn>
+                <v-btn @click="writePlan" v-if="type == 'write'">저장</v-btn>
+                <v-btn @click="modifyPlan" v-else>수정</v-btn>
               </v-col>
             </v-row>
           </span>
@@ -125,7 +126,7 @@
                 :list="routes[i - 1]"
                 handle=".handle"
                 group="route"
-                style="margin: 0 10px"
+                style="margin: 0 10px;"
               >
                 <div
                   class="handle"
@@ -171,8 +172,7 @@
                         </v-col>
                       </v-row>
                     </v-col>
-                    <v-col
-                      cols="1"
+                    <v-col cols="1"
                       style="
                         display: flex;
                         justify-content: center;
@@ -374,7 +374,6 @@ export default {
       gugunCode: null,
       word: null,
       duration: 0,
-      routes: [],
     };
   },
   created() {
@@ -412,8 +411,12 @@ export default {
       const currentDate = new Date(startDate);
       currentDate.setDate(startDate.getDate() + i);
       this.days.push(currentDate.toISOString().slice(0, 10));
+    }
 
-      this.routes.push([]);
+    if (this.routes.length == 0) {
+      for (let i = 0; i < this.duration; i++) {
+        this.routes.push
+      }
     }
     console.log(this.routes);
   },
@@ -514,6 +517,29 @@ export default {
           this.moveList();
         });
     },
+    modifyPlan() {
+      axios
+        .post(`/plan`, {
+          title: this.title,
+          description: this.description,
+          authority: this.authority,
+          hostNo: this.userNo,
+          startDate: this.travelDate[0],
+          endDate: this.travelDate[1],
+          participants: this.participants,
+          routes: this.routes,
+          sidoCode: this.travelSidoCode,
+          gugunCode: this.travelGugunCode,
+        })
+        .then(({ data }) => {
+          let msg = "등록 처리시 문제가 발생했습니다.";
+          if (data.status === "OK") {
+            msg = "등록이 완료되었습니다.";
+          }
+          alert(msg);
+          this.moveList();
+        });
+    },
     moveList() {
       this.$router.push({ name: "planList" });
     },
@@ -548,6 +574,7 @@ export default {
       participants: "getTravelParticipants",
       travelSidoCode: "getTravelSidoCode",
       travelGugunCode: "getTravelGugunCode",
+      travelRoutes: "getTravelRoutes",
     }),
   },
   watch: {
