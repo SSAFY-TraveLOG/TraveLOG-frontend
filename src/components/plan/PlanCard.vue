@@ -15,33 +15,54 @@
     </v-card-text>
 
     <v-card-actions>
-      <v-btn color="blue" text> 살펴보기 </v-btn>
-      <v-btn color="green" text> 수정하기 </v-btn>
+      <v-btn v-if="!type" color="blue" text @click="planDetail">
+        살펴보기
+      </v-btn>
+      <v-btn v-if="type" color="green" text @click="modifyPlan">
+        수정하기
+      </v-btn>
       <v-btn color="red" text @click="deletePlan"> 삭제하기 </v-btn>
     </v-card-actions>
   </v-card>
 </template>
 
 <script>
+import { mapActions } from "vuex";
+
 export default {
   name: "planCard",
   props: {
     plan: Object,
+    type: Boolean,
   },
   data() {
     return {};
   },
   created() {},
   methods: {
+    ...mapActions(["setPlanNo", "setPlanHandle"]),
     planDetail() {
+      this.setPlanNo(this.plan.planNo);
+      this.setPlanHandle("detail");
+
       this.$router.push({
-        name: "planDetail",
+        name: "planModify",
         params: { planNo: this.plan.planNo },
       });
     },
     deletePlan() {
+      this.setPlanHandle("delete");
       this.$router.push({
         name: "planDelete",
+        params: { planNo: this.plan.planNo },
+      });
+    },
+    modifyPlan() {
+      this.setPlanNo(this.plan.planNo);
+      this.setPlanHandle("modify");
+
+      this.$router.push({
+        name: "planModify",
         params: { planNo: this.plan.planNo },
       });
     },

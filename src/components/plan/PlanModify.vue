@@ -1,13 +1,14 @@
 <template>
-  <v-sheet class="d-flex align-center justify-center" width="100%">
-    <plan-input id="planInput" class="align-self-center" type="write" />
+  <v-sheet class="d-flex flex-column">
+    <plan-input id="planInput" class="align-self-center" type="modify"/>
   </v-sheet>
 </template>
 
 <script>
 import PlanInput from "./PlanInput.vue";
+
 export default {
-  name: "PlanWriter",
+  name: "PlanModify",
   components: { PlanInput },
   data() {
     return {

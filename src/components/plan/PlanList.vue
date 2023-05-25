@@ -32,7 +32,7 @@
             v-for="previousPlan in previousPlans"
             :key="previousPlan.planNo"
           >
-            <PlanCard :plan="previousPlan" />
+            <PlanCard :plan="previousPlan" :type="!future"/>
           </div>
         </div>
         <div v-else>
@@ -50,7 +50,7 @@
             v-for="futurePlan in futurePlans"
             :key="futurePlan.planNo"
           >
-            <PlanCard :plan="futurePlan" />
+            <PlanCard :plan="futurePlan" :type="future"/>
           </div>
         </div>
         <div v-else>
@@ -78,6 +78,7 @@ export default {
     return {
       previousPlans: [],
       futurePlans: [],
+      future: true,
     };
   },
   created() {

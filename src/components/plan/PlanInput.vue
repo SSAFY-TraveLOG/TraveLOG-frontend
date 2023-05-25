@@ -203,6 +203,9 @@ export default {
       gugunCode: null,
     };
   },
+  props: {
+    type: { type: String },
+  },
   created() {
     axios.get(`/user`).then((response) => {
       this.users = response.data.data.map((item) => ({
@@ -211,6 +214,29 @@ export default {
         userId: item.userId,
       }));
     });
+    if (this.type === "modify") {
+      axios.get(`/plan/${this.$route.params.planNo}`).then(({data}) => {
+        this.title = data.data.title;
+        this.description = data.data.description;
+        this.authority = data.data.authority;
+        this.dates.push(data.data.startDate.substring(0, 10))
+        this.dates.push(data.data.endDate.substring(0, 10))
+        console.log(`participants`)
+        console.log(data.data.participants)
+        data.data.participants.forEach(element => {
+          this.selectedUsers.push({
+          userId: element.participantId,
+          userNo: element.participantNo,
+          userName: element.participantName},)
+        });
+        //this.selectedUsers = [...data.data.participants]
+        console.log(this.selectedUsers)
+        this.sidoCode = data.data.sidoCode;
+        this.getGuguns();
+        this.gugunCode = data.data.gugunCode;
+        this.setTravelRoutes(data.data.routes);
+      });
+    }
   },
   methods: {
     ...mapActions([
@@ -221,6 +247,7 @@ export default {
       "setTravelParticipants",
       "setTravelSidoCode",
       "setTravelGugunCode",
+      "setTravelRoutes",
     ]),
     moveRoute() {
       if (!this?.title) {
@@ -246,7 +273,7 @@ export default {
       this.setTravelParticipants(this.selectedUsers.filter((user) => user.userNo != this.userNo));
       this.setTravelSidoCode(this.sidoCode);
       this.setTravelGugunCode(this.gugunCode);
-      this.$router.push({ name: "routeWriter" });
+      this.$router.push({ name: "routeWriter", params: {type: this.type} });
     },
     getGuguns() {
       axios.get(`/attraction/sido/${this.sidoCode}`).then(({ data }) => {
@@ -254,6 +281,11 @@ export default {
       });
     },
   },
+  watch: {
+    selectedUsers(newS) {
+      console.log(newS)
+    }
+  }
 };
 </script>
 
