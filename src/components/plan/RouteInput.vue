@@ -132,10 +132,10 @@
               <v-card-title>Day {{ i }}</v-card-title>
               <v-card-subtitle>{{ days[i - 1] }}</v-card-subtitle>
               <draggable
-                tag="ul"
                 :list="routes[i - 1]"
                 handle=".handle"
                 group="route"
+                style="margin: 0 10px;"
               >
                 <div
                   class="handle"
@@ -143,7 +143,14 @@
                   :key="element.contentId"
                 >
                   <v-row>
-                    <v-col cols="1">
+                    <v-col
+                      cols="1"
+                      style="
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                      "
+                    >
                       <font-awesome-icon :icon="['fas', 'align-justify']" />
                     </v-col>
                     <v-col cols="5">
@@ -166,11 +173,21 @@
                       </v-row>
                       <v-row>
                         <v-col>
-                          <input type="text" class="form-control" v-model="element.description" />
+                          <input
+                            type="text"
+                            class="form-control"
+                            v-model="element.description"
+                          />
                         </v-col>
                       </v-row>
                     </v-col>
-                    <v-col cols="1">
+                    <v-col cols="1"
+                      style="
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                      "
+                    >
                       <font-awesome-icon
                         :icon="['fas', 'xmark']"
                         @click="removeAt(i, idx)"
@@ -192,7 +209,7 @@
 import axios from "@/util/axios";
 import { mapGetters } from "vuex";
 import draggable from "vuedraggable";
-import AttractionTitle from "@/components/attraction/AttractionTitle"
+import AttractionTitle from "@/components/attraction/AttractionTitle";
 import KakaoMap from "@/components/attraction/KakaoMap";
 
 export default {
@@ -369,8 +386,8 @@ export default {
     };
   },
   created() {
-    console.log(this.description)
-    console.log(this.participants)
+    console.log(this.description);
+    console.log(this.participants);
     axios.get("/attraction/search").then(({ data }) => {
       let idx = 1;
       if (data.data != null) {
@@ -446,7 +463,10 @@ export default {
     },
     moveCenter(index) {
       index--;
-      this.$refs.kakaoMapRef.moveCenter(this.attractions[index].latitude, this.attractions[index].longitude);
+      this.$refs.kakaoMapRef.moveCenter(
+        this.attractions[index].latitude,
+        this.attractions[index].longitude
+      );
     },
     addRoute(route) {
       this.routes[this.focus - 1].push(route);
@@ -454,12 +474,12 @@ export default {
     },
     deleteRoute(i, index) {
       console.log(i);
-      console.log(index)
-      this.routes[i-1].splice(index, 1);
+      console.log(index);
+      this.routes[i - 1].splice(index, 1);
       console.log(this.routes);
     },
     removeAt(index, idx) {
-      this.routes[index-1].splice(idx, 1);
+      this.routes[index - 1].splice(idx, 1);
     },
     writePlan() {
       const routes = this.makeRoutes();
@@ -475,19 +495,20 @@ export default {
         sidoCode: this.travelSidoCode,
         gugunCode: this.travelGugunCode,
       });
-      axios.post(`/plan`, {
-        title: this.title,
-        description: this.description,
-        authority: this.authority,
-        hostNo: this.userNo,
-        startDate: this.travelDate[0],
-        endDate: this.travelDate[1],
-        participants: this.participants,
-        routes: routes,
-        sidoCode: this.travelSidoCode,
-        gugunCode: this.travelGugunCode,
-      })
-      .then(({ data }) => {
+      axios
+        .post(`/plan`, {
+          title: this.title,
+          description: this.description,
+          authority: this.authority,
+          hostNo: this.userNo,
+          startDate: this.travelDate[0],
+          endDate: this.travelDate[1],
+          participants: this.participants,
+          routes: routes,
+          sidoCode: this.travelSidoCode,
+          gugunCode: this.travelGugunCode,
+        })
+        .then(({ data }) => {
           let msg = "등록 처리시 문제가 발생했습니다.";
           if (data.status === "OK") {
             msg = "등록이 완료되었습니다.";
@@ -505,24 +526,32 @@ export default {
       this.routes.forEach((route, i) => {
         const currentDate = new Date(startDate);
         currentDate.setDate(startDate.getDate() + i);
-        console.log(currentDate)
+        console.log(currentDate);
 
         route.forEach((r, j) => {
           routes.push({
-            planOrder: j+1,
+            planOrder: j + 1,
             contentId: r.contentId,
             visitDate: currentDate.toISOString().slice(0, 10),
             description: r.description,
           });
         });
       });
-      console.log(routes)
+      console.log(routes);
       return routes;
-    }
+    },
   },
   computed: {
-    ...mapGetters({ userNo: "getUserNo", travelDate: "getTravelDate", title: "getTravelTitle",  description: "getTravelDescription", authority: "getTravelAuthority", participants: "getTravelParticipants", travelSidoCode: "getTravelSidoCode", travelGugunCode: "getTravelGugunCode"}),
-
+    ...mapGetters({
+      userNo: "getUserNo",
+      travelDate: "getTravelDate",
+      title: "getTravelTitle",
+      description: "getTravelDescription",
+      authority: "getTravelAuthority",
+      participants: "getTravelParticipants",
+      travelSidoCode: "getTravelSidoCode",
+      travelGugunCode: "getTravelGugunCode",
+    }),
   },
   watch: {
     page(newPage) {
@@ -542,6 +571,7 @@ export default {
   padding: 6px;
 }
 .active {
-  background-color: yellow;
+  border: 1px solid black;
+  margin: 20px 0;
 }
 </style>
