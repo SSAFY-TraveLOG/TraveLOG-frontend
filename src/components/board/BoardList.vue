@@ -37,60 +37,47 @@
         >검색</v-btn
       >
     </v-sheet>
-    <div class="d-flex flex-column" v-if="articles.length">
-      <v-data-table
-        class="align-self-center elevation-1"
-        style="width: 100%"
-        :headers="headers"
-        :items="articles"
-        item-key="displayNo"
-        :items-per-page="10"
-        hide-default-footer
-        :page.sync="page"
-        @page-count="pageCount = $event"
-      >
-        <template #[`item`]="{ item }">
-          <tr>
-            <td>
-              <v-icon @click="likeArticle(item)" color="pink">{{
-                item.like ? "mdi-heart" : "mdi-heart-outline"
-              }}</v-icon>
-            </td>
-            <td class="text-center" @click="openDetail(item.articleNo)">
-              {{ item.displayNo }}
-            </td>
-            <td @click="openDetail(item.articleNo)">{{ item.subject }}</td>
-            <td class="text-center" @click="openDetail(item.articleNo)">
-              {{ item.userName }}
-            </td>
-            <td class="text-center" @click="openDetail(item.articleNo)">
-              {{ item.registerTime }}
-            </td>
-            <td class="text-center" @click="openDetail(item.articleNo)">
-              {{ item.readCount }}
-            </td>
-            <td class="text-center" @click="openDetail(item.articleNo)">
-              {{ item.likeCount }}
-            </td>
-          </tr>
-        </template>
-      </v-data-table>
-      <div class="text-center pt-2">
-        <v-pagination v-model="page" :total-visible="7" :length="pageCount">
-        </v-pagination>
-      </div>
-    </div>
-    <div v-else>
-      <div class="d-flex flex-column">
-        <v-data-table
-          style="width: 100%"
-          :headers="headers"
-          :items="emptyArticle"
-          :items-per-page="10"
-          :search="search"
-        >
-        </v-data-table>
-      </div>
+    <v-data-table
+      class="align-self-center elevation-1"
+      style="width: 100%"
+      :headers="headers"
+      :items="articles"
+      :loading="isLoading"
+      item-key="displayNo"
+      :items-per-page="10"
+      hide-default-footer
+      :page.sync="page"
+      @page-count="pageCount = $event"
+    >
+      <template #[`item`]="{ item }">
+        <tr>
+          <td>
+            <v-icon @click="likeArticle(item)" color="pink">{{
+              item.like ? "mdi-heart" : "mdi-heart-outline"
+            }}</v-icon>
+          </td>
+          <td class="text-center" @click="openDetail(item.articleNo)">
+            {{ item.displayNo }}
+          </td>
+          <td @click="openDetail(item.articleNo)">{{ item.subject }}</td>
+          <td class="text-center" @click="openDetail(item.articleNo)">
+            {{ item.userName }}
+          </td>
+          <td class="text-center" @click="openDetail(item.articleNo)">
+            {{ item.registerTime }}
+          </td>
+          <td class="text-center" @click="openDetail(item.articleNo)">
+            {{ item.readCount }}
+          </td>
+          <td class="text-center" @click="openDetail(item.articleNo)">
+            {{ item.likeCount }}
+          </td>
+        </tr>
+      </template>
+    </v-data-table>
+    <div class="text-center pt-2">
+      <v-pagination v-model="page" :total-visible="7" :length="pageCount">
+      </v-pagination>
     </div>
     <v-btn
       class="align-self-end"
@@ -109,6 +96,7 @@ export default {
   name: "BoardList",
   components: {},
   data: () => ({
+    isLoading: true,
     page: 1,
     pageCount: 0,
     itemsPerPage: 10,
@@ -165,30 +153,7 @@ export default {
         align: "center",
       },
     ],
-    articles: [
-      {
-        articleNo: Number,
-        displayNo: Number,
-        subject: String,
-        userName: String,
-        registerTime: String,
-        readCount: Number,
-        like: Boolean,
-        likeCount: Number,
-      },
-    ],
-    emptyArticle: [
-      {
-        articleNo: "",
-        displayNo: "",
-        subject: "등록된 글이 없습니다.",
-        userName: "",
-        registerTime: "",
-        readCount: "",
-        like: "",
-        likeCount: "",
-      },
-    ],
+    articles: [],
     searchCondition: [
       {
         text: "제목",
@@ -273,6 +238,7 @@ export default {
         })
         .then(() => {
           this.articles = articles;
+          this.isLoading = false;
         });
     });
   },
