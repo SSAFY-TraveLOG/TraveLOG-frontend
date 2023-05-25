@@ -12,4 +12,5 @@ export default {
   getTravelGugunCode: (state) => state.travelGugunCode,
   getTravelRoutes: (state) => state.travelRoutes,
   getPlanNo: (state) => state.planNo,
+  getPlanHandle: (state) => state.planHandle,
 };

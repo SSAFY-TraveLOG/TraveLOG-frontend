@@ -21,6 +21,7 @@ const state = {
   travelGugunCode: 0,
   travelRoutes: [],
   planNo: 0,
+  planHandle: "",
 };
 
 export default new Vuex.Store({

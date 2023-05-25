@@ -37,5 +37,8 @@ export default {
   },
   ["PlanNo"](state, planNo) {
     state.planNo = planNo;
-  }
+  },
+  ["PlanHandle"](state, planHandle) {
+    state.planHandle = planHandle;
+  },
 };

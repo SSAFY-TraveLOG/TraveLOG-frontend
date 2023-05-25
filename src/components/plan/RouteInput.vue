@@ -113,8 +113,18 @@
                 <h1>여행 경로 리스트</h1>
               </v-col>
               <v-col class="d-flex align-center" cols="2">
-                <v-btn @click="writePlan" v-if="fromType == 'write'">저장</v-btn>
-                <v-btn @click="modifyPlan" v-else>수정</v-btn>
+                <v-btn @click="writePlan" v-if="fromType == 'write'"
+                  >저장</v-btn
+                >
+                <v-btn @click="modifyPlan" v-else-if="planHandle == 'modify'"
+                  >수정</v-btn
+                >
+                <v-btn
+                  @click="modifyPlan"
+                  v-else-if="planHandle == 'detail'"
+                  disabled
+                  >수정</v-btn
+                >
               </v-col>
             </v-row>
           </span>
@@ -126,7 +136,7 @@
                 :list="routes[i - 1]"
                 handle=".handle"
                 group="route"
-                style="margin: 0 10px;"
+                style="margin: 0 10px"
               >
                 <div
                   class="handle"
@@ -172,7 +182,8 @@
                         </v-col>
                       </v-row>
                     </v-col>
-                    <v-col cols="1"
+                    <v-col
+                      cols="1"
                       style="
                         display: flex;
                         justify-content: center;
@@ -379,29 +390,32 @@ export default {
     };
   },
   created() {
-    console.log(`travelRoutes`)
-    console.log(this.travelRoutes)
+    console.log(`travelRoutes`);
+    console.log(this.travelRoutes);
 
     console.log(this.description);
     console.log(this.participants);
     this.fromType = this.$route.params.type;
-    axios.get("/attraction/search").then(({ data }) => {
-      let idx = 1;
-      if (data.data != null) {
-        data.data.forEach((element) => {
-          element.displayNo = idx++;
-        });
-      }
-      this.attractions = data.data;
-      this.$refs.kakaoMapRef.loadMarker(
-        this.attractions.slice(
-          this.page * 10 - 10,
-          Math.min(this.attractions.length, this.page * 10)
-        )
-      );
-    }).then(() => {
-      this.isLoading = false;
-    });
+    axios
+      .get("/attraction/search")
+      .then(({ data }) => {
+        let idx = 1;
+        if (data.data != null) {
+          data.data.forEach((element) => {
+            element.displayNo = idx++;
+          });
+        }
+        this.attractions = data.data;
+        this.$refs.kakaoMapRef.loadMarker(
+          this.attractions.slice(
+            this.page * 10 - 10,
+            Math.min(this.attractions.length, this.page * 10)
+          )
+        );
+      })
+      .then(() => {
+        this.isLoading = false;
+      });
 
     this.duration =
       Math.floor(
@@ -429,30 +443,28 @@ export default {
       this.travelRoutes.forEach((element) => {
         this.days.forEach((d, index) => {
           var newDate = new Date(element.visitDate);
-          newDate.setDate(newDate.getDate()+1);
-          if(d == newDate.toISOString().slice(0, 10)) {
+          newDate.setDate(newDate.getDate() + 1);
+          if (d == newDate.toISOString().slice(0, 10)) {
             this.routes[index].push({
               contentId: element.contentId,
               firstImage: element.image,
               title: element.title,
               addr1: element.address,
-            })
+            });
           }
-        })
-      })
+        });
+      });
       for (let i = 0; i < this.duration; i++) {
         this.routes[i].sort(function (a, b) {
-        return a.planOrder < b.planOrder;
-      });
+          return a.planOrder < b.planOrder;
+        });
       }
     }
-    console.log(`routes`)
+    console.log(`routes`);
     console.log(this.routes);
   },
   methods: {
-    ...mapActions([
-      "setTravelRoutes",
-    ]),
+    ...mapActions(["setTravelRoutes"]),
     getGuguns() {
       axios.get(`/attraction/sido/${this.sidoCode}`).then(({ data }) => {
         this.guguns = data.data;
@@ -474,24 +486,27 @@ export default {
       if (this.word != null) {
         query += `word=${this.word}&`;
       }
-      axios.get(query).then(({ data }) => {
-        let idx = 1;
-        if (data.data != null) {
-          data.data.forEach((element) => {
-            element.displayNo = idx++;
-          });
-        }
-        this.attractions = data.data;
-        this.page = 1;
-        this.$refs.kakaoMapRef.loadMarker(
-          this.attractions.slice(
-            this.page * 10 - 10,
-            Math.min(this.attractions.length, this.page * 10)
-          )
-        );
-      }).then(() => {
-        this.isLoading = false;
-      });
+      axios
+        .get(query)
+        .then(({ data }) => {
+          let idx = 1;
+          if (data.data != null) {
+            data.data.forEach((element) => {
+              element.displayNo = idx++;
+            });
+          }
+          this.attractions = data.data;
+          this.page = 1;
+          this.$refs.kakaoMapRef.loadMarker(
+            this.attractions.slice(
+              this.page * 10 - 10,
+              Math.min(this.attractions.length, this.page * 10)
+            )
+          );
+        })
+        .then(() => {
+          this.isLoading = false;
+        });
     },
     moveCenter(index) {
       index--;
@@ -554,16 +569,16 @@ export default {
       const routes = this.makeRoutes();
       console.log({
         title: this.title,
-          description: this.description,
-          authority: this.authority,
-          hostNo: this.userNo,
-          startDate: this.travelDate[0],
-          endDate: this.travelDate[1],
-          participants: this.participants,
-          routes: routes,
-          sidoCode: this.travelSidoCode,
-          gugunCode: this.travelGugunCode,
-      })
+        description: this.description,
+        authority: this.authority,
+        hostNo: this.userNo,
+        startDate: this.travelDate[0],
+        endDate: this.travelDate[1],
+        participants: this.participants,
+        routes: routes,
+        sidoCode: this.travelSidoCode,
+        gugunCode: this.travelGugunCode,
+      });
       axios
         .patch(`/plan/${this.planNo}`, {
           title: this.title,
@@ -623,6 +638,7 @@ export default {
       travelGugunCode: "getTravelGugunCode",
       travelRoutes: "getTravelRoutes",
       planNo: "getPlanNo",
+      planHandle: "getPlanHandle",
     }),
   },
   watch: {
