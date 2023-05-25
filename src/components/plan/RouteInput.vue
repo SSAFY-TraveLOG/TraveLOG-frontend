@@ -64,56 +64,45 @@
             </v-row>
             <KakaoMap ref="kakaoMapRef" />
 
-            <div class="d-flex flex-column" v-if="attractions.length">
-              <v-data-table
-                class="align-self-center"
-                style="width: 100%"
-                :headers="headers"
-                :items="attractions"
-                :items-per-page="10"
-                hide-default-footer
-                :page.sync="page"
-                @page-count="pageCount = $event"
-              >
-                <template v-slot:item="{ item }">
-                  <tr :key="item.contentId" @click="moveCenter(item.displayNo)">
-                    <td class="text-center">{{ item.displayNo }}</td>
-                    <AttractionTitle :contentId="item.contentId" />
-                    <td>{{ item.addr1 }}</td>
-                    <td class="text-center">{{ item.attractionLike }}</td>
-                    <td class="text-center">
-                      <v-btn
-                        @click="
-                          addRoute({
-                            contentId: item.contentId,
-                            firstImage: item.firstImage,
-                            title: item.title,
-                            addr1: item.addr1,
-                          })
-                        "
-                        >추가</v-btn
-                      >
-                    </td>
-                  </tr>
-                </template>
-              </v-data-table>
-              <div class="text-center pt-2">
-                <v-pagination
-                  v-model="page"
-                  total-visible="7"
-                  :length="pageCount"
-                ></v-pagination>
-              </div>
-            </div>
-            <div v-else>
-              <div class="d-flex flex-column">
-                <v-data-table
-                  style="width: 100%"
-                  :headers="headers"
-                  :items="emptyAttraction"
-                  :items-per-page="10"
-                ></v-data-table>
-              </div>
+            <v-data-table
+              class="align-self-center"
+              style="width: 100%"
+              :headers="headers"
+              :items="attractions"
+              :loading="isLoading"
+              :items-per-page="10"
+              hide-default-footer
+              :page.sync="page"
+              @page-count="pageCount = $event"
+            >
+              <template v-slot:item="{ item }">
+                <tr :key="item.contentId" @click="moveCenter(item.displayNo)">
+                  <td class="text-center">{{ item.displayNo }}</td>
+                  <AttractionTitle :contentId="item.contentId" />
+                  <td>{{ item.addr1 }}</td>
+                  <td class="text-center">{{ item.attractionLike }}</td>
+                  <td class="text-center">
+                    <v-btn
+                      @click="
+                        addRoute({
+                          contentId: item.contentId,
+                          firstImage: item.firstImage,
+                          title: item.title,
+                          addr1: item.addr1,
+                        })
+                      "
+                      >추가</v-btn
+                    >
+                  </td>
+                </tr>
+              </template>
+            </v-data-table>
+            <div class="text-center pt-2">
+              <v-pagination
+                v-model="page"
+                total-visible="7"
+                :length="pageCount"
+              ></v-pagination>
             </div>
           </v-sheet>
         </v-col>
@@ -136,7 +125,7 @@
                 :list="routes[i - 1]"
                 handle=".handle"
                 group="route"
-                style="margin: 0 10px;"
+                style="margin: 0 10px"
               >
                 <div
                   class="handle"
@@ -182,7 +171,8 @@
                         </v-col>
                       </v-row>
                     </v-col>
-                    <v-col cols="1"
+                    <v-col
+                      cols="1"
                       style="
                         display: flex;
                         justify-content: center;
@@ -222,6 +212,7 @@ export default {
   },
   data() {
     return {
+      isLoading: true,
       page: 1,
       pageCount: 0,
       focus: 1,
@@ -403,6 +394,8 @@ export default {
           Math.min(this.attractions.length, this.page * 10)
         )
       );
+    }).then(() => {
+      this.isLoading = false;
     });
 
     this.duration =
@@ -431,6 +424,7 @@ export default {
       });
     },
     pressSearch() {
+      this.isLoading = true;
       this.attractions.splice(0);
       let query = `/attraction/search?`;
       if (this.sidoCode != null) {
@@ -460,6 +454,8 @@ export default {
             Math.min(this.attractions.length, this.page * 10)
           )
         );
+      }).then(() => {
+        this.isLoading = false;
       });
     },
     moveCenter(index) {
