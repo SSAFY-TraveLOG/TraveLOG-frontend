@@ -1,19 +1,19 @@
 import axios from "@/util/axios";
 
-let setUserId = ({ commit }, data) => {
-  commit("UserId", data);
+let setUserId = (store, data) => {
+  store.commit("UserId", data);
 };
 
-let setUserNo = ({ commit }, data) => {
-  commit("UserNo", data);
+let setUserNo = (store, data) => {
+  store.commit("UserNo", data);
 };
 
-let setUserName = ({ commit }, data) => {
-  commit("UserName", data);
+let setUserName = (store, data) => {
+  store.commit("UserName", data);
 };
 
-let setUserImage = ({ commit }, data) => {
-  commit("UserImage", data);
+let setUserImage = (store, data) => {
+  store.commit("UserImage", data);
 };
 
 let setTravelTitle = (store, data) => {
@@ -84,4 +84,5 @@ export default {
   setTravelAuthority,
   setTravelDate,
   setTravelParticipants,
+  setUserName,
 };
