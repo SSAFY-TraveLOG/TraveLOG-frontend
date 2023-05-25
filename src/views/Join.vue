@@ -115,7 +115,7 @@ export default {
             userName: this.userName,
             password: this.password,
             emailId: this.email.substring(0, this.email.indexOf("@")),
-            emailDomain: this.email.substring(this.email.indexOf("@")),
+            emailDomain: this.email.substring(this.email.indexOf("@")+1),
           })
           .then((response) => {
             console.log(response.data);
