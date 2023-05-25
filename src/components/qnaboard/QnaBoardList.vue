@@ -39,26 +39,22 @@
         >검색</v-btn
       >
     </v-sheet>
-    <div class="d-flex flex-column" v-if="articles.length">
-      <v-data-table
-        class="align-self-center"
-        style="width: 100%"
-        :headers="headers"
-        :items="articles"
-        :items-per-page="10"
-        @click:row="openDetail"
-      ></v-data-table>
-    </div>
-    <div v-else>
-      <div class="d-flex flex-column">
-        <v-data-table
-          style="width: 100%"
-          :headers="headers"
-          :items="emptyArticle"
-          :items-per-page="10"
-          :search="search"
-        ></v-data-table>
-      </div>
+    <v-data-table
+      class="align-self-center"
+      style="width: 100%"
+      :headers="headers"
+      :items="articles"
+      :loading="isLoading"
+      item-key="displayNo"
+      :items-per-page="10"
+      hide-default-footer
+      :page.sync="page"
+      @page-count="pageCount = $event"
+      @click:row="openDetail"
+    ></v-data-table>
+    <div class="text-center pt-2">
+      <v-pagination v-model="page" :total-visible="7" :length="pageCount">
+      </v-pagination>
     </div>
     <v-btn
       class="align-self-end"
@@ -79,6 +75,9 @@ export default {
   components: {},
   data: () => ({
     isLoading: true,
+    page: 1,
+    pageCount: 0,
+    itemsPerPage: 10,
     searchKey: "",
     search: "",
     headers: [
@@ -119,16 +118,6 @@ export default {
       },
     ],
     articles: [],
-    emptyArticle: [
-      {
-        articleNo: "",
-        displayNo: "",
-        subject: "등록된 글이 없습니다.",
-        userName: "",
-        registerTime: "",
-        readCount: "",
-      },
-    ],
     searchCondition: [
       {
         text: "제목",
