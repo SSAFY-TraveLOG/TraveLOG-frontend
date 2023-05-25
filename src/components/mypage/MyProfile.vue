@@ -1,23 +1,13 @@
 <template>
-  <v-sheet
-    class="pa-4 flex align-self-stretch"
-    color="white"
-    elevation="5"
-    height="700px"
-    rounded
-  >
+  <v-sheet class="pa-4 flex align-self-stretch" color="white" elevation="5" height="700px" rounded>
     <v-row class="d-flex">
       <v-col class="d-flex align-center justify-center" cols="2">
         <v-img contain height="80px" id="userImage" :src="userImage" />
       </v-col>
       <v-col class="d-flex align-center" cols="6">
-        <h1>{{ this.userId }}</h1>
+        <h1>{{ this.userName }}</h1>
       </v-col>
-      <v-col
-        class="d-flex align-center justify-end"
-        cols="4"
-        v-if="this.mode == 'edit'"
-      >
+      <v-col class="d-flex align-center justify-end" cols="4" v-if="this.mode == 'edit'">
         <v-btn @click="changeReadMode">취소</v-btn>
         <v-btn class="ml-3" @click="changeUserName">저장</v-btn>
       </v-col>
@@ -30,13 +20,7 @@
         <h5>이메일</h5>
       </v-col>
       <v-col cols="9">
-        <v-text-field
-          :value="userEmail"
-          outlined
-          dense
-          readonly
-          hide-details
-        ></v-text-field>
+        <v-text-field :value="userEmail" outlined dense readonly hide-details></v-text-field>
       </v-col>
     </v-row>
     <v-divider class="mt-2 mb-2"></v-divider>
@@ -89,9 +73,7 @@ export default {
       userNameRule: [
         (v) => !!v.trim() || "이름은 필수 입력사항입니다.",
         (v) => !(v && v.length >= 30) || "이름은 30자 이상 입력할 수 없습니다.",
-        (v) =>
-          !/[~!@#$%^&*()_+|<>?:{}]/.test(v) ||
-          "이름에는 특수문자를 사용할 수 없습니다.",
+        (v) => !/[~!@#$%^&*()_+|<>?:{}]/.test(v) || "이름에는 특수문자를 사용할 수 없습니다.",
       ],
     };
   },
