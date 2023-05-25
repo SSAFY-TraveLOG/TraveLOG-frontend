@@ -34,7 +34,7 @@
     <v-card-actions>
       <v-btn color="blue" text> 살펴보기 </v-btn>
       <v-btn color="green" text> 수정하기 </v-btn>
-      <v-btn color="red" text> 삭제하기 </v-btn>
+      <v-btn color="red" text @click="deletePlan"> 삭제하기 </v-btn>
     </v-card-actions>
   </v-card>
 </template>
@@ -53,6 +53,12 @@ export default {
     planDetail() {
       this.$router.push({
         name: "planDetail",
+        params: { planNo: this.plan.planNo },
+      });
+    },
+    deletePlan() {
+      this.$router.push({
+        name: "planDelete",
         params: { planNo: this.plan.planNo },
       });
     },
