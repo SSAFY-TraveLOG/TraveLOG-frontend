@@ -113,7 +113,7 @@
                 <h1>여행 경로 리스트</h1>
               </v-col>
               <v-col class="d-flex align-center" cols="2">
-                <v-btn @click="writePlan" v-if="type == 'write'">저장</v-btn>
+                <v-btn @click="writePlan" v-if="fromType == 'write'">저장</v-btn>
                 <v-btn @click="modifyPlan" v-else>수정</v-btn>
               </v-col>
             </v-row>
@@ -198,7 +198,7 @@
 
 <script>
 import axios from "@/util/axios";
-import { mapGetters } from "vuex";
+import { mapGetters, mapActions } from "vuex";
 import draggable from "vuedraggable";
 import AttractionTitle from "@/components/attraction/AttractionTitle";
 import KakaoMap from "@/components/attraction/KakaoMap";
@@ -374,11 +374,17 @@ export default {
       gugunCode: null,
       word: null,
       duration: 0,
+      routes: [],
+      fromType: "",
     };
   },
   created() {
+    console.log(`travelRoutes`)
+    console.log(this.travelRoutes)
+
     console.log(this.description);
     console.log(this.participants);
+    this.fromType = this.$route.params.type;
     axios.get("/attraction/search").then(({ data }) => {
       let idx = 1;
       if (data.data != null) {
@@ -415,12 +421,38 @@ export default {
 
     if (this.routes.length == 0) {
       for (let i = 0; i < this.duration; i++) {
-        this.routes.push
+        this.routes.push([]);
       }
     }
+
+    if (this.fromType == "modify") {
+      this.travelRoutes.forEach((element) => {
+        this.days.forEach((d, index) => {
+          var newDate = new Date(element.visitDate);
+          newDate.setDate(newDate.getDate()+1);
+          if(d == newDate.toISOString().slice(0, 10)) {
+            this.routes[index].push({
+              contentId: element.contentId,
+              firstImage: element.image,
+              title: element.title,
+              addr1: element.address,
+            })
+          }
+        })
+      })
+      for (let i = 0; i < this.duration; i++) {
+        this.routes[i].sort(function (a, b) {
+        return a.planOrder < b.planOrder;
+      });
+      }
+    }
+    console.log(`routes`)
     console.log(this.routes);
   },
   methods: {
+    ...mapActions([
+      "setTravelRoutes",
+    ]),
     getGuguns() {
       axios.get(`/attraction/sido/${this.sidoCode}`).then(({ data }) => {
         this.guguns = data.data;
@@ -512,14 +544,27 @@ export default {
           let msg = "등록 처리시 문제가 발생했습니다.";
           if (data.status === "OK") {
             msg = "등록이 완료되었습니다.";
+            this.setTravelRoutes([]);
           }
           alert(msg);
           this.moveList();
         });
     },
     modifyPlan() {
+      console.log({
+        title: this.title,
+          description: this.description,
+          authority: this.authority,
+          hostNo: this.userNo,
+          startDate: this.travelDate[0],
+          endDate: this.travelDate[1],
+          participants: this.participants,
+          routes: this.routes,
+          sidoCode: this.travelSidoCode,
+          gugunCode: this.travelGugunCode,
+      })
       axios
-        .post(`/plan`, {
+        .patch(`/plan/${this.planNo}`, {
           title: this.title,
           description: this.description,
           authority: this.authority,
@@ -535,6 +580,7 @@ export default {
           let msg = "등록 처리시 문제가 발생했습니다.";
           if (data.status === "OK") {
             msg = "등록이 완료되었습니다.";
+            this.setTravelRoutes([]);
           }
           alert(msg);
           this.moveList();
@@ -575,6 +621,7 @@ export default {
       travelSidoCode: "getTravelSidoCode",
       travelGugunCode: "getTravelGugunCode",
       travelRoutes: "getTravelRoutes",
+      planNo: "getPlanNo",
     }),
   },
   watch: {

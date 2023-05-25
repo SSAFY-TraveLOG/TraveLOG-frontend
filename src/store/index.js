@@ -20,6 +20,7 @@ const state = {
   travelSidoCode: 0,
   travelGugunCode: 0,
   travelRoutes: [],
+  planNo: 0,
 };
 
 export default new Vuex.Store({

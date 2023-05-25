@@ -34,5 +34,8 @@ export default {
   },
   ["TravelRoutes"](state, travelRoutes) {
     state.travelRoutes = travelRoutes;
+  },
+  ["PlanNo"](state, planNo) {
+    state.planNo = planNo;
   }
 };
