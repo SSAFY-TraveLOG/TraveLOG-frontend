@@ -63,16 +63,7 @@ export default {
   data() {
     return {
       article: {},
-      comments: [
-        {
-          replyId: Number,
-          userNo: Number,
-          userName: String,
-          articleNo: Number,
-          content: String,
-          registerTime: String,
-        },
-      ],
+      comments: [],
     };
   },
   components: {

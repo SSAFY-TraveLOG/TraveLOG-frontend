@@ -13,10 +13,12 @@ const state = {
   userNo: "",
   userImage: "",
   travelTitle: "",
-  travelDesciption: "",
+  travelDescription: "",
   travelAuthority: 0,
   travelDate: [],
   travelParticipants: [],
+  travelSidoCode: 0,
+  travelGugunCode: 0,
 };
 
 export default new Vuex.Store({
