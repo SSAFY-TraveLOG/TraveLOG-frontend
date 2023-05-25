@@ -15,8 +15,8 @@
     </v-card-text>
 
     <v-card-actions>
-      <v-btn color="blue" text> 살펴보기 </v-btn>
-      <v-btn color="green" text @click='modifyPlan'> 수정하기 </v-btn>
+      <v-btn v-if="!type" color="blue" text @click='modifyPlan'> 살펴보기 </v-btn>
+      <v-btn v-if="type" color="green" text @click='modifyPlan'> 수정하기 </v-btn>
       <v-btn color="red" text @click="deletePlan"> 삭제하기 </v-btn>
     </v-card-actions>
   </v-card>
@@ -29,6 +29,7 @@ export default {
   name: "planCard",
   props: {
     plan: Object,
+    type: Boolean,
   },
   data() {
     return {};
@@ -52,9 +53,10 @@ export default {
     },
     modifyPlan() {
       this.setPlanNo(this.plan.planNo);
+      
       this.$router.push({
         name: "planModify",
-        params: { planNo: this.plan.planNo },
+        params: { planNo: this.plan.planNo},
       });
     },
   },
