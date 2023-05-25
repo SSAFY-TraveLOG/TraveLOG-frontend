@@ -23,4 +23,10 @@ export default {
   ["TravelParticipants"](state, travelParticipants) {
     state.travelParticipants = travelParticipants;
   },
+  ["TravelSidoCode"](state, travelSidoCode) {
+    state.travelSidoCode = travelSidoCode;
+  },
+  ["TravelGugunCode"](state, travelGugunCode) {
+    state.travelGugunCode = travelGugunCode;
+  },
 };

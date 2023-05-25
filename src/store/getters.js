@@ -7,4 +7,6 @@ export default {
   getTravelAuthority: (state) => state.travelAuthority,
   getTravelDate: (state) => state.travelDate,
   getTravelParticipants: (state) => state.travelParticipants,
+  getTravelSidoCode: (state) => state.travelSidoCode,
+  getTravelGugunCode: (state) => state.travelGugunCode,
 };

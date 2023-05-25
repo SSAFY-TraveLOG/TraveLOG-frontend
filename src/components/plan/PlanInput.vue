@@ -71,6 +71,33 @@
               ></v-data-table>
             </v-card>
           </v-col>
+          <v-col>
+            <v-sheet width="150px">
+              <v-select
+                v-model="sidoCode"
+                hide-details="true"
+                label="시도"
+                :items="sidos"
+                item-text="sido"
+                item-value="code"
+                solo
+                @change="getGuguns()"
+              >
+              </v-select>
+            </v-sheet>
+            <v-sheet width="150px">
+              <v-select
+                v-model="gugunCode"
+                hide-details="true"
+                label="구군"
+                :items="guguns"
+                item-text="gugunName"
+                item-value="gugunCode"
+                solo
+              >
+              </v-select>
+            </v-sheet>
+          </v-col>
         </v-row>
       </v-container>
     </v-sheet>
@@ -107,6 +134,64 @@ export default {
         (v) =>
           !(v && v.length >= 30) || "여행 제목은 30자 이상 입력할 수 없습니다.",
       ],
+      sidos: [
+        {
+          sido: "서울", code: 1
+        },
+        {
+          sido: "인천", code: 2
+        },
+        {
+          sido: "대전", code: 3
+        },
+        {
+          sido: "대구", code: 4
+        },
+        {
+          sido: "광주", code: 5
+        },
+        {
+          sido: "부산", code: 6
+        },
+        {
+          sido: "울산", code: 7
+        },
+        {
+          sido: "세종특별자치시", code: 8
+        },
+        {
+          sido: "경기도", code: 31
+        },
+        {
+          sido: "강원도", code: 32
+        },
+        {
+          sido: "충청북도", code: 33
+        },
+        {
+          sido: "충청남도", code: 34
+        },
+        {
+          sido: "경상북도", code: 35
+        },
+        {
+          sido: "경상남도", code: 36
+        },
+        {
+          sido: "전라북도", code: 37
+        },
+        {
+          sido: "전라남도", code: 38
+        },
+        {
+          sido: "제주도", code: 39
+        },
+      ],
+      guguns: [
+
+      ],
+      sidoCode: null,
+      gugunCode: null,
     };
   },
   created() {
@@ -125,14 +210,26 @@ export default {
       "setTravelAuthority",
       "setTravelDate",
       "setTravelParticipants",
+      "setTravelSidoCode",
+      "setTravelGugunCode",
     ]),
     moveRoute() {
       this.setTravelTitle(this.title);
       this.setTravelDescription(this.description);
       this.setTravelAuthority(this.authority);
       this.setTravelDate(this.dates.sort());
-      this.setTravelParticipants(this.selectedUsers.filter(user => user.userNo != this.userNo));
+      this.setTravelParticipants(
+        this.selectedUsers.filter((user) => user.userNo != this.userNo)
+      );
+      this.setTravelSidoCode(this.sidoCode);
+      this.setTravelGugunCode(this.gugunCode);
       this.$router.push({ name: "routeWriter" });
+    },
+    getGuguns() {
+      axios.get(`/attraction/sido/${this.sidoCode}`)
+      .then(({data}) => {
+        this.guguns = data.data;
+      });
     },
   },
 };

@@ -16,6 +16,8 @@ const state = {
   travelAuthority: 0,
   travelDate: [],
   travelParticipants: [],
+  travelSidoCode: 0,
+  travelGugunCode: 0,
 };
 
 export default new Vuex.Store({

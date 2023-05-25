@@ -472,6 +472,8 @@ export default {
         endDate: this.travelDate[1],
         participants: this.participants,
         routes: routes,
+        sidoCode: this.travelSidoCode,
+        gugunCode: this.travelGugunCode,
       });
       axios.post(`/plan`, {
         title: this.title,
@@ -482,6 +484,8 @@ export default {
         endDate: this.travelDate[1],
         participants: this.participants,
         routes: routes,
+        sidoCode: this.travelSidoCode,
+        gugunCode: this.travelGugunCode,
       })
       .then(({ data }) => {
           let msg = "등록 처리시 문제가 발생했습니다.";
@@ -517,7 +521,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters({ userNo: "getUserNo", travelDate: "getTravelDate", title: "getTravelTitle",  description: "getTravelDescription", authority: "getTravelAuthority", participants: "getTravelParticipants"}),
+    ...mapGetters({ userNo: "getUserNo", travelDate: "getTravelDate", title: "getTravelTitle",  description: "getTravelDescription", authority: "getTravelAuthority", participants: "getTravelParticipants", travelSidoCode: "getTravelSidoCode", travelGugunCode: "getTravelGugunCode"}),
 
   },
   watch: {
