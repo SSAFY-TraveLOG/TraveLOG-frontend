@@ -244,6 +244,7 @@ export default {
   },
   methods: {
     pressSearch() {
+      this.isLoading = true;
       if (this.searchKey == "") {
         alert("검색 옵션을 선택해 주세요");
         return;
@@ -317,82 +318,84 @@ export default {
               })
               .then(() => {
                 this.articles = articles;
+                this.isLoading = false;
+              });
+          }
+        });
+      } else {
+        axios({
+          url: `/board/search?key=${this.searchKey}&value=${this.search}`,
+          method: "get",
+        }).then(({ data }) => {
+          let idx = 1;
+          if (data.data != null) {
+            data.data.forEach((element) => {
+              element.displayNo = idx++;
+              if (element.registerTime == "") return "";
+
+              let jsDate = new Date(element.registerTime);
+
+              let year = jsDate.getFullYear();
+              let month = jsDate.getMonth() + 1;
+              let date = jsDate.getDate();
+
+              if (month < 10) {
+                month = "0" + month;
+              }
+              if (date < 10) {
+                date = "0" + date;
+              }
+
+              element.registerTime = year + "-" + month + "-" + date;
+            });
+
+            data.data.forEach((element) => {
+              if (element.modifiedTime == "") return "";
+
+              let jsDate = new Date(element.modifiedTime);
+
+              let year = jsDate.getFullYear();
+              let month = jsDate.getMonth() + 1;
+              let date = jsDate.getDate();
+
+              if (month < 10) {
+                month = "0" + month;
+              }
+              if (date < 10) {
+                date = "0" + date;
+              }
+
+              element.modifiedTime = year + "-" + month + "-" + date;
+            });
+
+            let articles = data.data;
+
+            axios
+              .get(`/like/user/article/${this.userNo}`)
+              .then(({ data }) => {
+                let likeArr = data.data;
+                articles.forEach((article) => {
+                  if (likeArr.includes(article.articleNo.toString())) {
+                    article.like = true;
+                  } else article.like = false;
+                });
+                return Promise.all(
+                  articles.map((article) =>
+                    axios
+                      .get(`/like/article/${article.articleNo}`)
+                      .then(({ data }) => {
+                        article.likeCount = data.data;
+                      })
+                  )
+                );
+              })
+              .then(() => {
+                this.articles = articles;
+                this.isLoading = false;
               });
           }
         });
       }
-
-      axios({
-        url: `/board/search?key=${this.searchKey}&value=${this.search}`,
-        method: "get",
-      }).then(({ data }) => {
-        let idx = 1;
-        if (data.data != null) {
-          data.data.forEach((element) => {
-            element.displayNo = idx++;
-            if (element.registerTime == "") return "";
-
-            let jsDate = new Date(element.registerTime);
-
-            let year = jsDate.getFullYear();
-            let month = jsDate.getMonth() + 1;
-            let date = jsDate.getDate();
-
-            if (month < 10) {
-              month = "0" + month;
-            }
-            if (date < 10) {
-              date = "0" + date;
-            }
-
-            element.registerTime = year + "-" + month + "-" + date;
-          });
-
-          data.data.forEach((element) => {
-            if (element.modifiedTime == "") return "";
-
-            let jsDate = new Date(element.modifiedTime);
-
-            let year = jsDate.getFullYear();
-            let month = jsDate.getMonth() + 1;
-            let date = jsDate.getDate();
-
-            if (month < 10) {
-              month = "0" + month;
-            }
-            if (date < 10) {
-              date = "0" + date;
-            }
-
-            element.modifiedTime = year + "-" + month + "-" + date;
-          });
-
-          let articles = data.data;
-
-          axios
-            .get(`/like/user/article/${this.userNo}`)
-            .then(({ data }) => {
-              let likeArr = data.data;
-              articles.forEach((article) => {
-                if (likeArr.includes(article.articleNo.toString())) {
-                  article.like = true;
-                } else article.like = false;
-              });
-              return Promise.all(
-                articles.map((article) =>
-                  axios
-                    .get(`/like/article/${article.articleNo}`)
-                    .then(({ data }) => {
-                      article.likeCount = data.data;
-                    })
-                )
-              );
-            })
-            .then(() => {
-              this.articles = articles;
-            });
-        }
-      });
     },
     moveWrite() {
       this.$router.push({ name: "boardWriter" });
