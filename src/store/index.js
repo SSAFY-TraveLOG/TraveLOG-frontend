@@ -19,6 +19,7 @@ const state = {
   travelParticipants: [],
   travelSidoCode: 0,
   travelGugunCode: 0,
+  travelRoutes: [],
 };
 
 export default new Vuex.Store({

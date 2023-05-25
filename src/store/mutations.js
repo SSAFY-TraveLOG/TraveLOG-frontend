@@ -32,4 +32,7 @@ export default {
   ["TravelGugunCode"](state, travelGugunCode) {
     state.travelGugunCode = travelGugunCode;
   },
+  ["TravelRoutes"](state, travelRoutes) {
+    state.travelRoutes = travelRoutes;
+  }
 };

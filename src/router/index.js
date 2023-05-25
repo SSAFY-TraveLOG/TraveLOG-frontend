@@ -140,12 +140,12 @@ const routes = [
       //   component: () => import("@/components/plan/PlanDetail.vue"),
       //   meta: { requiresAuth: true },
       // },
-      // {
-      //   path: "modify/:planNo",
-      //   name: "planModify",
-      //   component: () => import("@/components/plan/PlanModify.vue"),
-      //   meta: { requiresAuth: true },
-      // },
+      {
+        path: "modify/:planNo",
+        name: "planModify",
+        component: () => import("@/components/plan/PlanModify.vue"),
+        meta: { requiresAuth: true },
+      },
       {
         path: "delete/:planNo",
         name: "planDelete",

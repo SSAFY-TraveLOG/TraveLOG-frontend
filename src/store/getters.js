@@ -10,4 +10,5 @@ export default {
   getTravelParticipants: (state) => state.travelParticipants,
   getTravelSidoCode: (state) => state.travelSidoCode,
   getTravelGugunCode: (state) => state.travelGugunCode,
+  getTravelRoutes: (state) => state.travelRoutes,
 };
