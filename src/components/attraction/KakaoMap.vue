@@ -14,10 +14,8 @@ export default {
       markers: [],
     }
   },
-  mounted() {
-    if (!window.kakao || !window.kakao.maps) {
-      this.loadScript();
-    }
+  created() {
+    this.loadScript();
   },
   methods: {
     loadScript() {
@@ -36,10 +34,12 @@ export default {
         level: 5,
       };
       this.map = new window.kakao.maps.Map(container, options);
-      if (attractions.length)
+      if (attractions?.length)
         this.loadMarker(attractions.slice(0, Math.min(attractions.length, 10)));
     },
     loadMarker(attractions) {
+      console.log(`loadMarker`)
+      console.log(attractions.length)
       this.markers.forEach((marker) => {
         marker.setMap(null);
       });
@@ -60,6 +60,7 @@ export default {
         marker.setMap(this.map);
         this.markers.push(marker);
       });
+      console.log(positions)
       this.moveCenter(positions[0].latlng.getLat(), positions[0].latlng.getLng());
     },
     moveCenter(lat, lng) {
