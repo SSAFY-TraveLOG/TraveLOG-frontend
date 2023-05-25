@@ -1,25 +1,8 @@
 <template>
-  <!-- <v-card @click="planDetail">
-    <v-card-title>
-      {{ plan.title }}
-    </v-card-title>
-    <v-card-text>
-      {{ plan.description }}
-    </v-card-text>
-    <v-card-text>
-      {{ plan.sidoName }}
-    </v-card-text>
-    <v-card-text>
-
-    </v-card-text>
-  </v-card> -->
   <v-card class="mx-auto" max-width="400">
-    <v-img
-      class="white--text align-end"
-      height="150px"
-      src="https://cdn.vuetifyjs.com/images/cards/docks.jpg"
-    >
+    <v-img class="white--text align-end" height="150px" :src="plan.thumbnail">
       <v-card-title>{{ plan.title }}</v-card-title>
+      <v-card-subtitle>{{ plan.sidoName }}</v-card-subtitle>
     </v-img>
 
     <v-card-subtitle class="pb-0">

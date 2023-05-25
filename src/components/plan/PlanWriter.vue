@@ -1,6 +1,6 @@
 <template>
-  <v-sheet class="d-flex flex-column">
-    <plan-input id="planInput" class="align-self-center" type="write"/>
+  <v-sheet class="d-flex align-center justify-center" width="100%">
+    <plan-input id="planInput" class="align-self-center" type="write" />
   </v-sheet>
 </template>
 
