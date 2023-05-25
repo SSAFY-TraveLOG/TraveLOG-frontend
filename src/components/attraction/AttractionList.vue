@@ -68,13 +68,14 @@
 
     <KakaoMap ref="kakaoMapRef" />
 
-    <div class="d-flex flex-column" v-if="attractions.length">
+    <div class="d-flex flex-column">
       <v-data-table
         class="align-self-center"
         style="width: 100%"
         :headers="headers"
         :items="attractions"
         :items-per-page="10"
+        :loading="isLoading"
         hide-default-footer
         :page.sync="page"
         @page-count="pageCount = $event"
@@ -101,16 +102,6 @@
         ></v-pagination>
       </div>
     </div>
-    <div v-else>
-      <div class="d-flex flex-column">
-        <v-data-table
-          style="width: 100%"
-          :headers="headers"
-          :items="emptyAttraction"
-          :items-per-page="10"
-        ></v-data-table>
-      </div>
-    </div>
   </v-sheet>
 </template>
 
@@ -130,6 +121,7 @@ export default {
     page: 1,
     pageCount: 0,
     dialog: false,
+    isLoading: true,
     headers: [
       {
         text: "",
@@ -325,15 +317,15 @@ export default {
           })
           .then(() => {
             this.attractions = elements;
+            console.log(this.attractions.length)
+            this.isLoading = false;
+            this.$refs.kakaoMapRef.loadMarker(
+              this.attractions.slice(
+                this.page * 10 - 10,
+                Math.min(this.attractions.length, this.page * 10)
+              )
+            );
           });
-      })
-      .then(() => {
-        this.$refs.kakaoMapRef.loadMarker(
-          this.attractions.slice(
-            this.page * 10 - 10,
-            Math.min(this.attractions.length, this.page * 10)
-          )
-        );
       });
   },
   methods: {
@@ -343,6 +335,7 @@ export default {
       });
     },
     pressSearch() {
+      this.isLoading = true;
       axios
         .get(`/like/user/attraction/${this.userNo}`)
         .then(({ data }) => {
@@ -393,15 +386,14 @@ export default {
             .then(() => {
               this.page = 1;
               this.attractions = elements;
+              this.isLoading = false;
+              this.$refs.kakaoMapRef.loadMarker(
+                this.attractions.slice(
+                  this.page * 10 - 10,
+                  Math.min(this.attractions.length, this.page * 10)
+                )
+              );
             });
-        })
-        .then(() => {
-          this.$refs.kakaoMapRef.loadMarker(
-            this.attractions.slice(
-              this.page * 10 - 10,
-              Math.min(this.attractions.length, this.page * 10)
-            )
-          );
         });
     },
     moveCenter(index) {
