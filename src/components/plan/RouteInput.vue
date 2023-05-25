@@ -551,6 +551,7 @@ export default {
         });
     },
     modifyPlan() {
+      const routes = this.makeRoutes();
       console.log({
         title: this.title,
           description: this.description,
@@ -559,7 +560,7 @@ export default {
           startDate: this.travelDate[0],
           endDate: this.travelDate[1],
           participants: this.participants,
-          routes: this.routes,
+          routes: routes,
           sidoCode: this.travelSidoCode,
           gugunCode: this.travelGugunCode,
       })
@@ -572,7 +573,7 @@ export default {
           startDate: this.travelDate[0],
           endDate: this.travelDate[1],
           participants: this.participants,
-          routes: this.routes,
+          routes: routes,
           sidoCode: this.travelSidoCode,
           gugunCode: this.travelGugunCode,
         })
