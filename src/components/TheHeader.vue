@@ -13,7 +13,7 @@
             <template v-slot:default="{ hover }">
               <div class="menuItem">
                 <router-link class="linking" :to="menu.link"
-                  ><div
+                  ><div class="text-center"
                     :class="{ 'hover-text': hover, 'no-hover-text': !hover }"
                   >
                     {{ menu.name }}
@@ -30,7 +30,7 @@
                 v-on="on"
                 class="d-flex justify-center"
               >
-                <v-img id="userImage" :src="userImage" />
+                <v-img id="userImage" class="align-self-center" :src="userImage" />
                 <v-hover>
                   <template v-slot:default="{ hover }">
                     <div class="menuItem">
@@ -61,7 +61,7 @@
             <template v-slot:default="{ hover }">
               <div class="menuItem">
                 <router-link class="linking" :to="menu.link"
-                  ><div
+                  ><div class="text-center"
                     :class="{ 'hover-text': hover, 'no-hover-text': !hover }"
                   >
                     {{ menu.name }}
@@ -125,7 +125,7 @@ export default {
         },
         {
           name: "회원가입",
-          link: "/join",
+          link: "/user/join",
         },
       ],
     };
@@ -153,7 +153,7 @@ export default {
 header {
   margin: 0;
   position: sticky;
-  height: 130px;
+  height: 80px;
   width: 100%;
   background-color: #62b7f3;
   line-height: 60px;
@@ -187,14 +187,14 @@ header {
 #icon {
   display: inline-block;
   vertical-align: middle;
-  height: 60px;
+  height: 40px;
   margin-right: 20px;
 }
 
 #logo {
   display: inline-block;
   vertical-align: middle;
-  height: 35px;
+  height: 25px;
 }
 
 .menu {
@@ -208,7 +208,7 @@ header {
 
 .menuItem {
   max-width: 700px;
-  width: 300px;
+  width: 180px;
   color: white;
 }
 
@@ -217,14 +217,14 @@ header {
 }
 
 #userImage {
-  width: 64px;
-  height: auto;
+  width: 40px;
+  height: 40px;
   image-rendering: smooth;
   margin-right: 10px;
 }
 .hover-text {
   transition: all 0.3s ease-in-out; /* Slow animation speed */
-  font-size: 25px;
+  font-size: 22px;
   font-weight: bold;
   color: white !important;
   text-decoration-color: white !important;
@@ -238,7 +238,7 @@ header {
 }
 .hover-user-name {
   transition: all 0.3s ease-in-out; /* Slow animation speed */
-  font-size: 25px;
+  font-size: 22px;
   font-weight: bold;
   color: #62b7f3;
   text-decoration-color: #62b7f3;
@@ -251,13 +251,11 @@ header {
   text-decoration-color: #62b7f3;
 }
 #myInfo {
-  width: 250px;
-  max-width: 350px;
+  width: 150px;
+  max-width: 150px;
   font-weight: bold;
   background-color: white;
   padding-left: 10px;
-  padding-top: 5px;
-  padding-bottom: 5px;
   border-radius: 10px;
 }
 #myInfo2 {
