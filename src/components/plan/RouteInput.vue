@@ -98,11 +98,7 @@
               </template>
             </v-data-table>
             <div class="text-center pt-2">
-              <v-pagination
-                v-model="page"
-                total-visible="7"
-                :length="pageCount"
-              ></v-pagination>
+              <v-pagination v-model="page" total-visible="7" :length="pageCount"></v-pagination>
             </div>
           </v-sheet>
         </v-col>
@@ -135,20 +131,12 @@
                   <v-row>
                     <v-col
                       cols="1"
-                      style="
-                        display: flex;
-                        justify-content: center;
-                        align-items: center;
-                      "
+                      style="display: flex; justify-content: center; align-items: center"
                     >
                       <font-awesome-icon :icon="['fas', 'align-justify']" />
                     </v-col>
                     <v-col cols="5">
-                      <img
-                        :src="element.firstImage"
-                        alt="이미지"
-                        width="100%"
-                      />
+                      <img :src="element.firstImage" alt="이미지" width="100%" />
                     </v-col>
                     <v-col cols="5">
                       <v-row>
@@ -163,26 +151,15 @@
                       </v-row>
                       <v-row>
                         <v-col>
-                          <input
-                            type="text"
-                            class="form-control"
-                            v-model="element.description"
-                          />
+                          <input type="text" class="form-control" v-model="element.description" />
                         </v-col>
                       </v-row>
                     </v-col>
                     <v-col
                       cols="1"
-                      style="
-                        display: flex;
-                        justify-content: center;
-                        align-items: center;
-                      "
+                      style="display: flex; justify-content: center; align-items: center"
                     >
-                      <font-awesome-icon
-                        :icon="['fas', 'xmark']"
-                        @click="removeAt(i, idx)"
-                      />
+                      <font-awesome-icon :icon="['fas', 'xmark']" @click="removeAt(i, idx)" />
                     </v-col>
                   </v-row>
                 </div>
@@ -380,31 +357,31 @@ export default {
   created() {
     console.log(this.description);
     console.log(this.participants);
-    axios.get("/attraction/search").then(({ data }) => {
-      let idx = 1;
-      if (data.data != null) {
-        data.data.forEach((element) => {
-          element.displayNo = idx++;
-        });
-      }
-      this.attractions = data.data;
-      this.$refs.kakaoMapRef.loadMarker(
-        this.attractions.slice(
-          this.page * 10 - 10,
-          Math.min(this.attractions.length, this.page * 10)
-        )
-      );
-    }).then(() => {
-      this.isLoading = false;
-    });
+    axios
+      .get("/attraction/search")
+      .then(({ data }) => {
+        let idx = 1;
+        if (data.data != null) {
+          data.data.forEach((element) => {
+            element.displayNo = idx++;
+          });
+        }
+        this.attractions = data.data;
+        this.$refs.kakaoMapRef.loadMarker(
+          this.attractions.slice(
+            this.page * 10 - 10,
+            Math.min(this.attractions.length, this.page * 10)
+          )
+        );
+      })
+      .then(() => {
+        this.isLoading = false;
+      });
 
+    if (this.travelDate.length == 1) this.travelDate[1] = this.travelDate[0];
     this.duration =
       Math.floor(
-        (new Date(this.travelDate[1]) - new Date(this.travelDate[0])) /
-          1000 /
-          60 /
-          60 /
-          24
+        (new Date(this.travelDate[1]) - new Date(this.travelDate[0])) / 1000 / 60 / 60 / 24
       ) + 1;
 
     const startDate = new Date(this.travelDate[0]);
@@ -439,24 +416,27 @@ export default {
       if (this.word != null) {
         query += `word=${this.word}&`;
       }
-      axios.get(query).then(({ data }) => {
-        let idx = 1;
-        if (data.data != null) {
-          data.data.forEach((element) => {
-            element.displayNo = idx++;
-          });
-        }
-        this.attractions = data.data;
-        this.page = 1;
-        this.$refs.kakaoMapRef.loadMarker(
-          this.attractions.slice(
-            this.page * 10 - 10,
-            Math.min(this.attractions.length, this.page * 10)
-          )
-        );
-      }).then(() => {
-        this.isLoading = false;
-      });
+      axios
+        .get(query)
+        .then(({ data }) => {
+          let idx = 1;
+          if (data.data != null) {
+            data.data.forEach((element) => {
+              element.displayNo = idx++;
+            });
+          }
+          this.attractions = data.data;
+          this.page = 1;
+          this.$refs.kakaoMapRef.loadMarker(
+            this.attractions.slice(
+              this.page * 10 - 10,
+              Math.min(this.attractions.length, this.page * 10)
+            )
+          );
+        })
+        .then(() => {
+          this.isLoading = false;
+        });
     },
     moveCenter(index) {
       index--;
@@ -553,10 +533,7 @@ export default {
   watch: {
     page(newPage) {
       this.$refs.kakaoMapRef.loadMarker(
-        this.attractions.slice(
-          newPage * 10 - 10,
-          Math.min(this.attractions.length, newPage * 10)
-        )
+        this.attractions.slice(newPage * 10 - 10, Math.min(this.attractions.length, newPage * 10))
       );
     },
   },
