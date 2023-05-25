@@ -9,56 +9,20 @@
       </div>
       <div class="menuTop">
         <div class="menu" v-if="userNo">
-          <v-hover>
+          <v-hover v-for="(menu, i) in userMenu" :key="i">
             <template v-slot:default="{ hover }">
               <div class="menuItem">
-                <router-link class="linking" to="/attraction"
+                <router-link class="linking" :to="menu.link"
                   ><v-text-field
-                    variant="plain"
+                    color="#FFFFFF"
+                    readonly
                     :class="{ 'hover-text': hover, 'no-hover-text': !hover }"
-                    value="관광지 알아보기"
+                    :value="menu.name"
                   ></v-text-field
                 ></router-link>
               </div>
             </template>
           </v-hover>
-          <v-hover>
-            <template v-slot:default="{ hover }">
-              <div class="menuItem">
-                <router-link class="linking" to="/plan"
-                  ><v-text-field
-                    :class="{ 'hover-text': hover, 'no-hover-text': !hover }"
-                    value="여행 일정 만들기"
-                  ></v-text-field
-                ></router-link>
-              </div>
-            </template>
-          </v-hover>
-          <v-hover>
-            <template v-slot:default="{ hover }">
-              <div class="menuItem">
-                <router-link class="linking" to="/board"
-                  ><v-text-field
-                    :class="{ 'hover-text': hover, 'no-hover-text': !hover }"
-                    value="게시판"
-                  ></v-text-field
-                ></router-link>
-              </div>
-            </template>
-          </v-hover>
-          <v-hover>
-            <template v-slot:default="{ hover }">
-              <div class="menuItem">
-                <router-link class="linking" to="/qna"
-                  ><v-text-field
-                    :class="{ 'hover-text': hover, 'no-hover-text': !hover }"
-                    value="Q&A"
-                  ></v-text-field
-                ></router-link>
-              </div>
-            </template>
-          </v-hover>
-          <!-- 여기에 프사/닉네임 띄우고 호버하면 셀렉트메뉴 띄우기 -->
           <v-menu transition="scroll-y-transition">
             <template v-slot:activator="{ on, attrs }">
               <v-sheet
@@ -68,7 +32,22 @@
                 class="d-flex justify-center"
               >
                 <v-img id="userImage" :src="userImage" />
-                <v-text-field :value="userName"></v-text-field>
+                <v-hover>
+                  <template v-slot:default="{ hover }">
+                    <div class="menuItem">
+                      <v-text-field
+                        color="#FFFFFF"
+                        readonly
+                        id="userName"
+                        :class="{
+                          'hover-text': hover,
+                          'no-hover-text': !hover,
+                        }"
+                        :value="userName"
+                      ></v-text-field>
+                    </div>
+                  </template>
+                </v-hover>
               </v-sheet>
             </template>
             <v-list>
@@ -80,73 +59,15 @@
           </v-menu>
         </div>
         <div class="menu" v-else>
-          <v-hover>
+          <v-hover v-for="(menu, i) in visitorMenu" :key="i">
             <template v-slot:default="{ hover }">
               <div class="menuItem">
-                <router-link class="linking" to="/attraction"
+                <router-link class="linking" :to="menu.link"
                   ><v-text-field
+                    color="#FFFFFF"
+                    readonly
                     :class="{ 'hover-text': hover, 'no-hover-text': !hover }"
-                    value="관광지 알아보기"
-                  ></v-text-field
-                ></router-link>
-              </div>
-            </template>
-          </v-hover>
-          <v-hover>
-            <template v-slot:default="{ hover }">
-              <div class="menuItem">
-                <router-link class="linking" to="/plan"
-                  ><v-text-field
-                    :class="{ 'hover-text': hover, 'no-hover-text': !hover }"
-                    value="여행 일정 만들기"
-                  ></v-text-field
-                ></router-link>
-              </div>
-            </template>
-          </v-hover>
-          <v-hover>
-            <template v-slot:default="{ hover }">
-              <div class="menuItem">
-                <router-link class="linking" to="/board"
-                  ><v-text-field
-                    :class="{ 'hover-text': hover, 'no-hover-text': !hover }"
-                    value="게시판"
-                  ></v-text-field
-                ></router-link>
-              </div>
-            </template>
-          </v-hover>
-          <v-hover>
-            <template v-slot:default="{ hover }">
-              <div class="menuItem">
-                <router-link class="linking" to="/qna"
-                  ><v-text-field
-                    :class="{ 'hover-text': hover, 'no-hover-text': !hover }"
-                    value="Q&A"
-                  ></v-text-field
-                ></router-link>
-              </div>
-            </template>
-          </v-hover>
-          <v-hover>
-            <template v-slot:default="{ hover }">
-              <div class="menuItem">
-                <router-link class="linking" to="/login"
-                  ><v-text-field
-                    :class="{ 'hover-text': hover, 'no-hover-text': !hover }"
-                    value="로그인"
-                  ></v-text-field
-                ></router-link>
-              </div>
-            </template>
-          </v-hover>
-          <v-hover>
-            <template v-slot:default="{ hover }">
-              <div class="menuItem">
-                <router-link class="linking" to="/join"
-                  ><v-text-field
-                    :class="{ 'hover-text': hover, 'no-hover-text': !hover }"
-                    value="회원가입"
+                    :value="menu.name"
                   ></v-text-field
                 ></router-link>
               </div>
@@ -166,10 +87,48 @@ export default {
   components: {},
   data() {
     return {
-      menu: [
+      userMenu: [
         {
           name: "관광지 알아보기",
           link: "/attraction",
+        },
+        {
+          name: "여행 일정 만들기",
+          link: "/plan",
+        },
+        {
+          name: "공유 게시판",
+          link: "/board",
+        },
+        {
+          name: "Q&A",
+          link: "/qna",
+        },
+      ],
+      visitorMenu: [
+        {
+          name: "관광지 알아보기",
+          link: "/attraction",
+        },
+        {
+          name: "여행 일정 만들기",
+          link: "/plan",
+        },
+        {
+          name: "공유 게시판",
+          link: "/board",
+        },
+        {
+          name: "Q&A",
+          link: "/qna",
+        },
+        {
+          name: "로그인",
+          link: "/login",
+        },
+        {
+          name: "회원가입",
+          link: "/join",
         },
       ],
     };
@@ -208,8 +167,9 @@ header {
 
 .linking {
   font-weight: 500;
-  text-decoration: none;
-  color: white;
+  text-decoration-line: none;
+  color: white !important;
+  text-decoration-color: white !important;
   margin: 0, 10;
 }
 
@@ -259,30 +219,34 @@ header {
   height: auto;
   image-rendering: smooth;
 }
-
 .hover-text {
   transition: all 0.3s ease-in-out; /* Slow animation speed */
-  font-size: 25px;
+  font-size: 21px;
   font-weight: bold;
   color: white !important;
+  text-decoration-color: white !important;
 }
 .no-hover-text {
   transition: all 0.2s ease-in-out; /* Slow animation speed */
   font-size: 16px;
-  font-weight: normal;
+  font-weight: bold;
   color: white !important;
+  text-decoration-color: white !important;
 }
 
 .hover-text:hover {
-  text-decoration-color: white;
+  color: white !important;
+  text-decoration-color: white !important;
 }
 
 .no-hover-text:not(:hover) {
+  color: white !important;
   text-decoration-color: white !important;
 }
 
 #myInfo {
   min-width: 200px;
+  font-weight: bold;
   background-color: transparent;
 }
 </style>
