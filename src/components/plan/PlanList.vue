@@ -69,6 +69,7 @@ export default {
         curDate += "0"
       }
       curDate += (currentDate.getMonth()+1) + "-" + currentDate.getDate();
+      console.log(data.data)
       data.data.forEach(plan => {
         if (plan.endDate < curDate) {
           this.previousPlans.push(plan);
@@ -77,7 +78,7 @@ export default {
         }
       });
       this.previousPlans.sort(function(a, b) {
-      return b.endDate.localeCompare(a.endDate);
+        return b.endDate.localeCompare(a.endDate);
       });
       this.futurePlans.sort(function(a, b) {
         return a.startDate.localeCompare(b.startDate);

@@ -14,8 +14,8 @@ export default {
   ["TravelTitle"](state, travelTitle) {
     state.travelTitle = travelTitle;
   },
-  ["TravelDesciption"](state, travelDesciption) {
-    state.travelDesciption = travelDesciption;
+  ["TravelDescription"](state, travelDescription) {
+    state.travelDescription = travelDescription;
   },
   ["TravelAuthority"](state, travelAuthority) {
     state.travelAuthority = travelAuthority;
@@ -25,5 +25,11 @@ export default {
   },
   ["TravelParticipants"](state, travelParticipants) {
     state.travelParticipants = travelParticipants;
+  },
+  ["TravelSidoCode"](state, travelSidoCode) {
+    state.travelSidoCode = travelSidoCode;
+  },
+  ["TravelGugunCode"](state, travelGugunCode) {
+    state.travelGugunCode = travelGugunCode;
   },
 };
