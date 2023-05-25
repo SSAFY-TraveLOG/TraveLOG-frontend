@@ -28,6 +28,7 @@
         hide-details="true"
         v-model="search"
         label="Search"
+        :loading="isLoading"
         clearable
         solo
         single-line
@@ -76,6 +77,7 @@ export default {
   name: "QnaBoardList",
   components: {},
   data: () => ({
+    isLoading: true,
     searchKey: "",
     search: "",
     headers: [
@@ -191,10 +193,12 @@ export default {
         });
       }
       this.articles = data.data;
+      this.isLoading = false;
     });
   },
   methods: {
     pressSearch() {
+      this.isLoading = true;
       if (this.searchKey == "") {
         alert("검색 옵션을 선택해 주세요");
         return;
@@ -249,6 +253,7 @@ export default {
           });
         }
         this.articles = data.data;
+        this.isLoading = false;
       });
     },
     moveWrite() {
