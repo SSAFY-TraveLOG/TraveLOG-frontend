@@ -13,13 +13,12 @@
             <template v-slot:default="{ hover }">
               <div class="menuItem">
                 <router-link class="linking" :to="menu.link"
-                  ><v-text-field
-                    color="#FFFFFF"
-                    readonly
+                  ><div
                     :class="{ 'hover-text': hover, 'no-hover-text': !hover }"
-                    :value="menu.name"
-                  ></v-text-field
-                ></router-link>
+                  >
+                    {{ menu.name }}
+                  </div></router-link
+                >
               </div>
             </template>
           </v-hover>
@@ -35,16 +34,15 @@
                 <v-hover>
                   <template v-slot:default="{ hover }">
                     <div class="menuItem">
-                      <v-text-field
-                        color="#FFFFFF"
-                        readonly
+                      <div
                         id="userName"
                         :class="{
-                          'hover-text': hover,
-                          'no-hover-text': !hover,
+                          'hover-user-name': hover,
+                          'no-hover-user-name': !hover,
                         }"
-                        :value="userName"
-                      ></v-text-field>
+                      >
+                        {{ userName }}
+                      </div>
                     </div>
                   </template>
                 </v-hover>
@@ -63,13 +61,12 @@
             <template v-slot:default="{ hover }">
               <div class="menuItem">
                 <router-link class="linking" :to="menu.link"
-                  ><v-text-field
-                    color="#FFFFFF"
-                    readonly
+                  ><div
                     :class="{ 'hover-text': hover, 'no-hover-text': !hover }"
-                    :value="menu.name"
-                  ></v-text-field
-                ></router-link>
+                  >
+                    {{ menu.name }}
+                  </div></router-link
+                >
               </div>
             </template>
           </v-hover>
@@ -205,48 +202,72 @@ header {
   /* background-color: pink; */
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: space-evenly;
+  /* background-color: red; */
 }
 
 .menuItem {
-  max-width: 800px;
-  width: 800px;
+  max-width: 700px;
+  width: 300px;
   color: white;
+}
+
+#userName {
+  color: #62b7f3;
 }
 
 #userImage {
   width: 64px;
   height: auto;
   image-rendering: smooth;
+  margin-right: 10px;
 }
 .hover-text {
   transition: all 0.3s ease-in-out; /* Slow animation speed */
-  font-size: 21px;
+  font-size: 25px;
   font-weight: bold;
   color: white !important;
   text-decoration-color: white !important;
 }
 .no-hover-text {
   transition: all 0.2s ease-in-out; /* Slow animation speed */
-  font-size: 16px;
+  font-size: 20px;
   font-weight: bold;
   color: white !important;
   text-decoration-color: white !important;
 }
-
-.hover-text:hover {
-  color: white !important;
-  text-decoration-color: white !important;
+.hover-user-name {
+  transition: all 0.3s ease-in-out; /* Slow animation speed */
+  font-size: 25px;
+  font-weight: bold;
+  color: #62b7f3;
+  text-decoration-color: #62b7f3;
 }
-
-.no-hover-text:not(:hover) {
-  color: white !important;
-  text-decoration-color: white !important;
+.no-hover-user-name {
+  transition: all 0.2s ease-in-out; /* Slow animation speed */
+  font-size: 20px;
+  font-weight: bold;
+  color: #62b7f3;
+  text-decoration-color: #62b7f3;
 }
-
 #myInfo {
-  min-width: 200px;
+  width: 250px;
+  max-width: 350px;
   font-weight: bold;
-  background-color: transparent;
+  background-color: white;
+  padding-left: 10px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  border-radius: 10px;
+}
+#myInfo2 {
+  width: 250px;
+  max-width: 350px;
+  font-weight: bold;
+  background-color: white;
+  padding-left: 10px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  border-radius: 10px;
 }
 </style>
