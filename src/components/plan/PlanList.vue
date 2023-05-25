@@ -3,50 +3,27 @@
     class="ma-5 pa-4 d-flex flex-column"
     color="white"
     elevation="5"
+    width="80%"
     min-height="800px"
     rounded
   >
-    <!-- <template>
-      <v-container>
-        <v-img
-          src="https://seoul16travelog.s3.ap-northeast-2.amazonaws.com/Plan.png"
-          contain
-          position="relative"
+    <v-sheet class="d-flex align-center justify-center">
+      <v-img
+        src="https://seoul16travelog.s3.ap-northeast-2.amazonaws.com/Plan.png"
+        height="400px"
+        contain
+      >
+        <div id="planMainText">여행, 어디로 떠나시나요?</div>
+        <v-btn
+          class="create-plan-button"
+          color="transparent"
+          @click="moveWrite"
         >
-          <v-btn
-            class="image-button"
-            absolute
-            top="100%"
-            left="100%"
-            transform="translate(-50%, -50%)"
-            @click="moveWrite"
-            >나만의 여행 계획 만들기</v-btn
-          >
-        </v-img>
-      </v-container>
-    </template> -->
-
-    <template>
-      <v-container>
-        <v-img
-          src="https://seoul16travelog.s3.ap-northeast-2.amazonaws.com/Plan.png"
-          contain
-          position="relative"
-        >
-          <v-btn
-            class="centered-button"
-            absolute
-            top="50%"
-            left="50%"
-            transform="translate(-50%, -50%)"
-            color="primary"
-            >Button</v-btn
-          >
-        </v-img>
-      </v-container>
-    </template>
-
-    <h1 style="margin-top: 60px">지난 여행</h1>
+          <div>나만의 여행 계획 만들기</div>
+        </v-btn>
+      </v-img>
+    </v-sheet>
+    <div id="previousPlan">지난 여행</div>
     <v-sheet class="travel">
       <horizontal-scroll class="horizontal-scroll">
         <div class="outer" v-if="previousPlans.length">
@@ -64,7 +41,7 @@
       </horizontal-scroll>
     </v-sheet>
 
-    <h1 style="margin-top: 60px">앞으로의 여행</h1>
+    <div id="futurePlan">앞으로의 여행</div>
     <v-sheet class="travel">
       <horizontal-scroll class="horizontal-scroll">
         <div class="outer" v-if="futurePlans.length">
@@ -115,6 +92,38 @@ export default {
       curDate += currentDate.getMonth() + 1 + "-" + currentDate.getDate();
       console.log(data.data);
       data.data.forEach((plan) => {
+        plan.thumbnail =
+          "https://seoul16travelog.s3.ap-northeast-2.amazonaws.com/";
+        if (plan.sidoName.startsWith("서울")) {
+          plan.thumbnail += "RegionThumbnailSeoul.png";
+        } else if (plan.sidoName.startsWith("인천")) {
+          plan.thumbnail += "RegionThumbnailIncheon.png";
+        } else if (plan.sidoName.startsWith("대전")) {
+          plan.thumbnail += "RegionThumbnailDaejeon.png";
+        } else if (plan.sidoName.startsWith("대구")) {
+          plan.thumbnail += "RegionThumbnailDaegu.png";
+        } else if (plan.sidoName.startsWith("광주")) {
+          plan.thumbnail += "RegionThumbnailGwangju.png";
+        } else if (plan.sidoName.startsWith("부산")) {
+          plan.thumbnail += "RegionThumbnailBusan.png";
+        } else if (plan.sidoName.startsWith("울산")) {
+          plan.thumbnail += "RegionThumbnailUlsan.png";
+        } else if (plan.sidoName.startsWith("세종특별자치시")) {
+          plan.thumbnail += "RegionThumbnailSejong.png";
+        } else if (plan.sidoName.startsWith("경기도")) {
+          plan.thumbnail += "RegionThumbnailKyeonggi.png";
+        } else if (plan.sidoName.startsWith("충청")) {
+          plan.thumbnail += "RegionThumbnailChungCheong.png";
+        } else if (plan.sidoName.startsWith("경상")) {
+          plan.thumbnail += "RegionThumbnailKyeongsang.png";
+        } else if (plan.sidoName.startsWith("전라")) {
+          plan.thumbnail += "RegionThumbnailJeollado.png";
+        } else if (plan.sidoName.startsWith("제주도")) {
+          plan.thumbnail += "RegionThumbnailJeju.png";
+        } else if (plan.sidoName.startsWith("강원도")) {
+          plan.thumbnail += "RegionThumbnailKangwon.png";
+        }
+
         if (plan.endDate < curDate) {
           this.previousPlans.push(plan);
         } else {
@@ -176,5 +185,38 @@ export default {
 
 .inner-content:not(:first-of-type) {
   margin-left: 30px;
+}
+
+.create-plan-button {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  font-weight: 700;
+  top: 50%;
+  left: 26%;
+}
+
+#planMainText {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  font-size: 30px;
+  font-weight: 900;
+  top: 35%;
+  left: 30%;
+}
+
+#previousPlan {
+  margin-left: 20px;
+  font-size: 30px;
+  font-weight: 900;
+  margin-top: 60px;
+  color: #2c3e50;
+}
+
+#futurePlan {
+  margin-left: 20px;
+  font-size: 30px;
+  font-weight: 900;
+  margin-top: 60px;
+  color: #0091ea;
 }
 </style>
