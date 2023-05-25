@@ -6,15 +6,56 @@
     min-height="800px"
     rounded
   >
-    <h1 class="align-self-center mb-5">여행계획</h1>
-    <v-btn @click="moveWrite">만들기</v-btn>
+    <!-- <template>
+      <v-container>
+        <v-img
+          src="https://seoul16travelog.s3.ap-northeast-2.amazonaws.com/Plan.png"
+          contain
+          position="relative"
+        >
+          <v-btn
+            class="image-button"
+            absolute
+            top="100%"
+            left="100%"
+            transform="translate(-50%, -50%)"
+            @click="moveWrite"
+            >나만의 여행 계획 만들기</v-btn
+          >
+        </v-img>
+      </v-container>
+    </template> -->
+
+    <template>
+      <v-container>
+        <v-img
+          src="https://seoul16travelog.s3.ap-northeast-2.amazonaws.com/Plan.png"
+          contain
+          position="relative"
+        >
+          <v-btn
+            class="centered-button"
+            absolute
+            top="50%"
+            left="50%"
+            transform="translate(-50%, -50%)"
+            color="primary"
+            >Button</v-btn
+          >
+        </v-img>
+      </v-container>
+    </template>
 
     <h1 style="margin-top: 60px">지난 여행</h1>
     <v-sheet class="travel">
       <horizontal-scroll class="horizontal-scroll">
         <div class="outer" v-if="previousPlans.length">
-          <div class="inner-content" v-for="previousPlan in previousPlans" :key="previousPlan.planNo">
-            <PlanCard :plan="previousPlan"/>
+          <div
+            class="inner-content"
+            v-for="previousPlan in previousPlans"
+            :key="previousPlan.planNo"
+          >
+            <PlanCard :plan="previousPlan" />
           </div>
         </div>
         <div v-else>
@@ -27,8 +68,12 @@
     <v-sheet class="travel">
       <horizontal-scroll class="horizontal-scroll">
         <div class="outer" v-if="futurePlans.length">
-          <div class="inner-content" v-for="futurePlan in futurePlans" :key="futurePlan.planNo">
-            <PlanCard :plan="futurePlan"/>
+          <div
+            class="inner-content"
+            v-for="futurePlan in futurePlans"
+            :key="futurePlan.planNo"
+          >
+            <PlanCard :plan="futurePlan" />
           </div>
         </div>
         <div v-else>
@@ -56,35 +101,33 @@ export default {
     return {
       previousPlans: [],
       futurePlans: [],
-    }
+    };
   },
   created() {
     this.previousPlans.splice(0);
     this.futurePlans.splice(0);
-    axios.get(`/plan/list/${this.userNo}`)
-    .then(({data}) => {
+    axios.get(`/plan/list/${this.userNo}`).then(({ data }) => {
       const currentDate = new Date();
       let curDate = currentDate.getFullYear() + "-";
-      if (currentDate.getMonth()+1 < 10) {
-        curDate += "0"
+      if (currentDate.getMonth() + 1 < 10) {
+        curDate += "0";
       }
-      curDate += (currentDate.getMonth()+1) + "-" + currentDate.getDate();
-      console.log(data.data)
-      data.data.forEach(plan => {
+      curDate += currentDate.getMonth() + 1 + "-" + currentDate.getDate();
+      console.log(data.data);
+      data.data.forEach((plan) => {
         if (plan.endDate < curDate) {
           this.previousPlans.push(plan);
         } else {
           this.futurePlans.push(plan);
         }
       });
-      this.previousPlans.sort(function(a, b) {
+      this.previousPlans.sort(function (a, b) {
         return b.endDate.localeCompare(a.endDate);
       });
-      this.futurePlans.sort(function(a, b) {
+      this.futurePlans.sort(function (a, b) {
         return a.startDate.localeCompare(b.startDate);
       });
     });
-    
   },
   computed: {
     ...mapGetters({ userNo: "getUserNo" }),
@@ -92,8 +135,8 @@ export default {
   methods: {
     moveWrite() {
       this.$router.push({ name: "planWriter" });
-    }
-  }
+    },
+  },
 };
 </script>
 
