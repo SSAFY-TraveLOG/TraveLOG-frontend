@@ -4,9 +4,11 @@
     color="white"
     elevation="5"
     min-height="800px"
+    width="80%"
     rounded
   >
-    <h1 class="align-self-center mb-3">게시글 작성</h1>
+    <h1 class="align-self-center mb-3" v-if="this.type == 'write'">게시글 작성</h1>
+    <h1 class="align-self-center mb-3" v-else>게시글 수정</h1>
     <v-container>
       <form @submit="onSubmit" @reset="onReset">
         <v-text-field

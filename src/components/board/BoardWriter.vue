@@ -1,7 +1,7 @@
 <template>
-    <div>
-        <board-input-item type="write"></board-input-item>
-    </div>
+  <v-sheet class="d-flex align-center justify-center" width="100%">
+    <board-input-item type="write"></board-input-item>
+  </v-sheet>
 </template>
 
 <script>
@@ -12,5 +12,5 @@ export default {
   components: {
     BoardInputItem,
   },
-}
+};
 </script>

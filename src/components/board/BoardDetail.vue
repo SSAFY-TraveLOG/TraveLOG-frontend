@@ -4,6 +4,7 @@
     color="white"
     elevation="5"
     min-height="800px"
+    width="80%"
     rounded
   >
     <v-container>

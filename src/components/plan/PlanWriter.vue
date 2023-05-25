@@ -1,5 +1,5 @@
 <template>
-  <v-sheet class="d-flex flex-column">
+  <v-sheet class="d-flex align-center justify-center" width="100%">
     <plan-input id="planInput" class="align-self-center" />
   </v-sheet>
 </template>
