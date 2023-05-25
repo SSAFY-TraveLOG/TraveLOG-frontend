@@ -7,9 +7,7 @@
 <script>
 export default {
   name: "PlanPage",
-}
+};
 </script>
 
-<style>
-
-</style>
+<style></style>

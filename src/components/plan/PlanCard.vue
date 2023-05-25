@@ -1,18 +1,24 @@
 <template>
-  <v-card @click="planDetail">
-    <v-card-title>
-      {{ plan.title }}
-    </v-card-title>
-    <v-card-text>
-      {{ plan.description }}
+  <v-card class="mx-auto" max-width="400">
+    <v-img class="white--text align-end" height="150px" :src="plan.thumbnail">
+      <v-card-title>{{ plan.title }}</v-card-title>
+      <v-card-subtitle>{{ plan.sidoName }}</v-card-subtitle>
+    </v-img>
+
+    <v-card-subtitle class="pb-0">
+      {{ plan.startDate.substring(0, 10) }} ~
+      {{ plan.endDate.substring(0, 10) }}
+    </v-card-subtitle>
+
+    <v-card-text class="text--primary">
+      <div>{{ plan.description }}</div>
     </v-card-text>
-    <v-card-text> {{ plan.startDate }} ~ {{ plan.endDate }} </v-card-text>
-    <v-card-text>
-      {{ plan.sidoName }}
-    </v-card-text>
-    <v-card-text>
-      {{ plan.authority }}
-    </v-card-text>
+
+    <v-card-actions>
+      <v-btn color="blue" text> 살펴보기 </v-btn>
+      <v-btn color="green" text> 수정하기 </v-btn>
+      <v-btn color="red" text @click="deletePlan"> 삭제하기 </v-btn>
+    </v-card-actions>
   </v-card>
 </template>
 
@@ -25,12 +31,17 @@ export default {
   data() {
     return {};
   },
-  created() {
-  },
+  created() {},
   methods: {
     planDetail() {
       this.$router.push({
         name: "planDetail",
+        params: { planNo: this.plan.planNo },
+      });
+    },
+    deletePlan() {
+      this.$router.push({
+        name: "planDelete",
         params: { planNo: this.plan.planNo },
       });
     },
