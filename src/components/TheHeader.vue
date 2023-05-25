@@ -143,7 +143,7 @@
           <v-hover>
             <template v-slot:default="{ hover }">
               <div class="menuItem">
-                <router-link class="linking" to="/join"
+                <router-link class="linking" to="/user/join"
                   ><v-text-field
                     :class="{ 'hover-text': hover, 'no-hover-text': !hover }"
                     value="회원가입"
