@@ -5,14 +5,13 @@
 <script>
 export default {
   name: "KakaoMap",
-  props: {
-  },
+  props: {},
   data() {
     return {
       map: null,
       imageSrc: "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png",
       markers: [],
-    }
+    };
   },
   created() {
     this.loadScript();
@@ -20,14 +19,15 @@ export default {
   methods: {
     loadScript() {
       const script = document.createElement("script");
-      script.src = "//dapi.kakao.com/v2/maps/sdk.js?appkey=34b2b54b0d95de95256f503879af6ed1&autoload=false";
+      script.src =
+        "//dapi.kakao.com/v2/maps/sdk.js?appkey=34b2b54b0d95de95256f503879af6ed1&autoload=false";
       script.onload = () => {
         window.kakao.maps.load(this.loadMap);
       };
       document.head.appendChild(script);
     },
     loadMap(attractions) {
-      console.log(`loadMap`)
+      console.log(`loadMap`);
       const container = document.getElementById("map");
       const options = {
         center: new window.kakao.maps.LatLng(37.500613, 127.036431),
@@ -38,14 +38,17 @@ export default {
         this.loadMarker(attractions.slice(0, Math.min(attractions.length, 10)));
     },
     loadMarker(attractions) {
-      console.log(`loadMarker`)
-      console.log(attractions.length)
+      console.log(`loadMarker`);
+      console.log(attractions.length);
       this.markers.forEach((marker) => {
         marker.setMap(null);
       });
       const positions = [];
       attractions.forEach((attraction) => {
-        positions.push({title: attraction.title, latlng: new window.kakao.maps.LatLng(attraction.latitude, attraction.longitude)});
+        positions.push({
+          title: attraction.title,
+          latlng: new window.kakao.maps.LatLng(attraction.latitude, attraction.longitude),
+        });
       });
       this.markers.splice(0);
       positions.forEach((position) => {
@@ -60,17 +63,17 @@ export default {
         marker.setMap(this.map);
         this.markers.push(marker);
       });
-      console.log(positions)
-      this.moveCenter(positions[0].latlng.getLat(), positions[0].latlng.getLng());
+      console.log(positions);
+      if (positions.length) {
+        this.moveCenter(positions[0].latlng.getLat(), positions[0].latlng.getLng());
+      }
     },
     moveCenter(lat, lng) {
       this.map.setCenter(new window.kakao.maps.LatLng(lat, lng));
       this.map.setLevel(5);
-    }
+    },
   },
-}
+};
 </script>
 
-<style>
-
-</style>
+<style></style>
