@@ -1,7 +1,7 @@
 <template>
-  <div class="d-flex align-center justify-center">
+  <v-sheet class="d-flex align-center justify-center">
     <router-view></router-view>
-  </div>
+  </v-sheet>
 </template>
 
 <script>

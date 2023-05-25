@@ -4,11 +4,12 @@
     color="white"
     elevation="5"
     min-height="800px"
+    width="80%"
     rounded
   >
     <v-container>
       <v-row>
-        <v-col cols="6">
+        <v-col cols="7">
           <v-sheet>
             <v-row>
               <v-col cols="3">
@@ -76,11 +77,11 @@
               >
                 <template v-slot:item="{ item }">
                   <tr :key="item.contentId" @click="moveCenter(item.displayNo)">
-                    <td>{{ item.displayNo }}</td>
+                    <td class="text-center">{{ item.displayNo }}</td>
                     <AttractionTitle :contentId="item.contentId" />
                     <td>{{ item.addr1 }}</td>
-                    <td>{{ item.attractionLike }}</td>
-                    <td>
+                    <td class="text-center">{{ item.attractionLike }}</td>
+                    <td class="text-center">
                       <v-btn
                         @click="
                           addRoute({
@@ -116,13 +117,13 @@
             </div>
           </v-sheet>
         </v-col>
-        <v-col cols="6">
+        <v-col cols="5">
           <span class="text-center">
-            <v-row>
-              <v-col>
+            <v-row class="d-flex mb-3">
+              <v-col cols="10">
                 <h1>여행 경로 리스트</h1>
               </v-col>
-              <v-col cols="1">
+              <v-col class="d-flex align-center" cols="2">
                 <v-btn @click="writePlan">저장</v-btn>
               </v-col>
             </v-row>
@@ -237,14 +238,14 @@ export default {
           text: "관광지명",
           value: "title",
           sortable: false,
-          width: "10%",
+          width: "30%",
           align: "center",
         },
         {
           text: "주소",
           value: "addr1",
           sortable: false,
-          width: "15%",
+          width: "45%",
           align: "center",
         },
         {

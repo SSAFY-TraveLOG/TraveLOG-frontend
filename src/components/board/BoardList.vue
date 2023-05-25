@@ -4,6 +4,7 @@
     color="white"
     elevation="5"
     min-height="800px"
+    width="80%"
     rounded
   >
     <h1 class="align-self-center mb-5">자유게시판</h1>
