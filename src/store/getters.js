@@ -1,0 +1,16 @@
+export default {
+  getUserNo: (state) => state.userNo,
+  getUserId: (state) => state.userId,
+  getUserName: (state) => state.userName,
+  getUserImage: (state) => state.userImage,
+  getTravelTitle: (state) => state.travelTitle,
+  getTravelDescription: (state) => state.travelDescription,
+  getTravelAuthority: (state) => state.travelAuthority,
+  getTravelDate: (state) => state.travelDate,
+  getTravelParticipants: (state) => state.travelParticipants,
+  getTravelSidoCode: (state) => state.travelSidoCode,
+  getTravelGugunCode: (state) => state.travelGugunCode,
+  getTravelRoutes: (state) => state.travelRoutes,
+  getPlanNo: (state) => state.planNo,
+  getPlanHandle: (state) => state.planHandle,
+};
