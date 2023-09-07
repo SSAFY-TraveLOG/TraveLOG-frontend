@@ -178,9 +178,9 @@
 
   <table align="center">
     <tr>
-      <td align="center"><img src="https://avatars.githubusercontent.com/u/102013524?s=96&v=4" width="160"></td>
       <td align="center"><img src="https://avatars.githubusercontent.com/u/55385934?s=96&v=4" width="160"></td>
-      <td align="center"><img src="https://avatars.githubusercontent.com/u/101235186?s=96&v=4" width="160"></td>
+      <td align="center"><img src="https://avatars.githubusercontent.com/u/77479853?s=96&v=4" width="160"></td>
+      <td align="center"><img src="https://avatars.githubusercontent.com/u/64067641?v=4" width="160"></td>
     </tr>
     <tr>
       <td align="center">박민아</td>
